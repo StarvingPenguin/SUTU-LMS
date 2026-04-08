@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUTU LMS - Central Command Center (Admin)</title>
+  <!-- Standard Master Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Component CSS Dependancy resolving styles accurately -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Component-Hooks SVG Mapping -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body style="background-color: #f8fafc;">
+  <!-- Auth Guard (Admin-Only): blocks non-logged-in users AND non-admin users -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script>requireAdmin();</script>
+  
+  <!-- Standardized Platform Header -->
+  <header class="navbar">
+    <div class="logo"><a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span style="color: var(--accent-color);">COMMAND CENTER</span></a></div>
+    
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList"></div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span class="user-name" style="color: var(--bg-color); font-weight: 500;">Personnel</span>
+          <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">UA</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <!-- Interactive Master Nav -->
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+      <div class="sidebar-logo">
+        <img src="../assets/university-logo.png" alt="University Logo">
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="admin-nav-link active" data-target="admin-dashboard"><i data-feather="monitor" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard Overview</span></a></li>
+        <li><a href="#" class="admin-nav-link" data-target="admin-users"><i data-feather="users" style="margin-right: 12px; width: 20px;"></i> <span>Manage Users</span></a></li>
+        <li><a href="#" class="admin-nav-link" data-target="admin-courses"><i data-feather="book" style="margin-right: 12px; width: 20px;"></i> <span>Manage Pavilions</span></a></li>
+        <li><a href="#" class="admin-nav-link" data-target="admin-announcements"><i data-feather="bell" style="margin-right: 12px; width: 20px;"></i> <span>Notifications</span></a></li>
+        <li><a href="#" class="admin-nav-link" data-target="admin-mock-tests"><i data-feather="edit-3" style="margin-right: 12px; width: 20px;"></i> <span>Manage Mock Tests</span></a></li>
+        <li><a href="grades.html"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Academy Grades</span></a></li>
+        <li><a href="doubts.html"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="#" class="admin-nav-link" data-target="admin-settings"><i data-feather="sliders" style="margin-right: 12px; width: 20px;"></i> <span>Site Settings</span></a></li>
+        <li><a href="#" class="admin-nav-link" data-target="admin-reports"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>System Reports</span></a></li>
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='login.html';" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Secure Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Master Interaction Environment -->
+    <main class="dashboard-content">
+      
+      <!-- Dashboard View natively mapping explicit statistical payloads -->
+      <div id="admin-dashboard" class="admin-content-area active">
+        <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color); margin-bottom: 2rem;">System Overview</h1>
+        
+        <div class="admin-stat-grid">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon"><i data-feather="users" style="width: 28px; height: 28px;"></i></div>
+            <div class="admin-stat-details">
+              <h4>Total Enrolled Students</h4>
+              <p id="masterStudentCount">...</p>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon"><i data-feather="user-check" style="width: 28px; height: 28px;"></i></div>
+            <div class="admin-stat-details">
+              <h4>Total Assigned Faculty</h4>
+              <p id="masterFacultyCount">...</p>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon"><i data-feather="book-open" style="width: 28px; height: 28px;"></i></div>
+            <div class="admin-stat-details">
+              <h4>Master Course Catalog</h4>
+              <p id="masterCourseCount">...</p>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon"><i data-feather="activity" style="width: 28px; height: 28px;"></i></div>
+            <div class="admin-stat-details">
+              <h4>Active Live Enrollments</h4>
+              <p id="masterEnrollCount">...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-table-container">
+          <div style="padding: 1.5rem; border-bottom: 1px solid #e2e8f0;">
+            <h3 style="color: var(--primary-color); font-family: var(--font-heading);">Recent Security & System Activity Logs</h3>
+          </div>
+          <table class="admin-table">
+            <tbody>
+              <tr><td><strong>New node registration:</strong> Rahul Sharma mapped to Department -> Computer Engineering</td><td style="text-align: right; color: #94a3b8;">10 mins ago</td></tr>
+              <tr><td><strong>System Write Object:</strong> Course uploaded -> Advanced Machine Learning defined by Dr. Patil</td><td style="text-align: right; color: #94a3b8;">1 hr ago</td></tr>
+              <tr><td style="color: #059669;"><strong>Native OS Security Backup completed strictly into Server 3</strong></td><td style="text-align: right; color: #94a3b8;">3 hrs ago</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Manage Database Users View -->
+      <div id="admin-users" class="admin-content-area">
+        <div class="admin-section-header">
+          <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color);">Manage System Users</h1>
+          <div style="display: flex; gap: 1rem;">
+            <input type="text" class="reply-input" placeholder="Search identities..." style="width: 300px;">
+            <button class="btn btn-primary" id="openRegisterUserModal" style="display: flex; align-items: center; gap: 0.5rem;"><i data-feather="user-plus" style="width: 18px;"></i> Register User</button>
+          </div>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name Matrix</th>
+                <th>Identity Email</th>
+                <th>Role Constraint</th>
+                <th>Department Map</th>
+                <th>Account Status</th>
+                <th>Admin Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 500; color: var(--primary-color);">Rahul Sharma</td>
+                <td>rahul.s@sutu.edu</td>
+                <td style="font-weight: 600; color: #475569;">Student</td>
+                <td>Computer Eng.</td>
+                <td><span class="admin-status-badge status-active">Active</span></td>
+                <td>
+                  <button class="action-btn edit"><i data-feather="edit-2" style="width: 16px;"></i></button>
+                  <button class="action-btn delete"><i data-feather="trash-2" style="width: 16px;"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: 500; color: var(--primary-color);">Dr. Ramesh Kumar</td>
+                <td>ramesh.k@sutu.edu</td>
+                <td style="font-weight: 600; color: var(--primary-color);">Faculty</td>
+                <td>Computer Eng.</td>
+                <td><span class="admin-status-badge status-active">Active</span></td>
+                <td>
+                  <button class="action-btn edit"><i data-feather="edit-2" style="width: 16px;"></i></button>
+                  <button class="action-btn delete"><i data-feather="trash-2" style="width: 16px;"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: 500; color: var(--primary-color);">Dr. Priya Patel</td>
+                <td>priya.p@sutu.edu</td>
+                <td style="font-weight: 600; color: var(--primary-color);">Faculty</td>
+                <td>Civil Eng.</td>
+                <td><span class="admin-status-badge status-inactive">Inactive</span></td>
+                <td>
+                  <button class="action-btn edit"><i data-feather="edit-2" style="width: 16px;"></i></button>
+                  <button class="action-btn delete"><i data-feather="trash-2" style="width: 16px;"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Manage Database Course Content View -->
+      <div id="admin-courses" class="admin-content-area">
+        <div class="admin-section-header">
+          <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color);">Master Course Catalog</h1>
+          <button class="btn btn-primary" id="openAddCourseModal" style="display: flex; align-items: center; gap: 0.5rem; background-color: var(--accent-color); color: var(--primary-color);"><i data-feather="plus-circle" style="width: 18px;"></i> Append Course Node</button>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Strict Course Code</th>
+                <th>Assigned Title</th>
+                <th>Sub-Department</th>
+                <th>Evaluated Instructor</th>
+                <th>Valid Enrollments</th>
+                <th>Visibility Status</th>
+                <th>Database Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-courses-tbody">
+              <!-- Populated dynamically via JS from Supabase -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Standard Fallbacks mapping additional explicitly required categories cleanly -->
+      <div id="admin-announcements" class="admin-content-area">
+        <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color); margin-bottom: 2rem;">Manage Native Announcements</h1>
+        <div class="admin-table-container" style="padding: 4rem; text-align: center; color: #94a3b8;">
+          <i data-feather="bell" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+          <h3>Broadcast Panel</h3>
+          <p>Integrate system-wide alerts strictly bypassing Student-defined scopes sequentially.</p>
+        </div>
+      </div>
+
+      <!-- Manage Mock Tests View -->
+      <div id="admin-mock-tests" class="admin-content-area">
+        <div class="admin-section-header">
+          <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color);">Manage Mock Tests</h1>
+        </div>
+
+        <div class="admin-table-container" style="padding: 2rem;">
+          <div style="margin-bottom: 2rem;">
+            <label style="font-weight: 500; display: block; margin-bottom: 0.5rem;">Select Course to Manage Test</label>
+            <select id="mockTestCourseSelect" style="width: 100%; max-width: 400px; padding: 0.8rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <option value="">-- Select a Course --</option>
+            </select>
+          </div>
+
+          <div id="mockTestBuilder" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem;">
+              <h3 style="font-family: var(--font-heading); color: var(--primary-color);">Test Questions</h3>
+              <button class="btn btn-primary" id="openAddQuestionModal" style="display: flex; align-items: center; gap: 0.5rem;"><i data-feather="plus" style="width: 16px;"></i> Add Question</button>
+            </div>
+            <div id="mockTestQuestionsList" style="display: flex; flex-direction: column; gap: 1rem;">
+              <!-- Questions populate here -->
+            </div>
+            <button class="btn btn-primary" id="saveMockTestBtn" style="margin-top: 2rem; width: 100%; background-color: #10b981; border-color: #10b981;"><i data-feather="save" style="width: 16px; margin-right: 0.5rem;"></i> Save Mock Test Mapping globally</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manage Site Settings View -->
+      <div id="admin-settings" class="admin-content-area">
+        <div class="admin-section-header">
+          <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color);">Global Site Configuration</h1>
+        </div>
+        
+        <div class="admin-table-container" style="padding: 2rem;">
+          <form id="siteSettingsForm">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label style="font-weight: 600; font-size: 1.1rem; color: var(--primary-color);">Hero Section Title</label>
+              <input type="text" id="settingHeroTitle" placeholder="Empower Your Future" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 0.5rem; font-size: 1rem;">
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label style="font-weight: 600; font-size: 1.1rem; color: var(--primary-color);">Hero Section Subtitle</label>
+              <textarea id="settingHeroSub" rows="3" placeholder="Join India's leading digital education..." style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 0.5rem; font-size: 1rem;"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label style="font-weight: 600; font-size: 1.1rem; color: var(--primary-color);">News Ticker Updates (One item per line)</label>
+              <textarea id="settingNewsTicker" rows="5" placeholder="Admissions open&#10;New courses added" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 0.5rem; font-size: 1rem;"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom: 2rem;">
+              <label style="font-weight: 600; font-size: 1.1rem; color: var(--primary-color);">Primary Contact Email</label>
+              <input type="email" id="settingContactEmail" placeholder="support@sutu.edu" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 0.5rem; font-size: 1rem;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 1rem; background-color: #10b981; border-color: #10b981;"><i data-feather="save" style="width: 18px; margin-right: 0.5rem;"></i> Apply Configuration Globally</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="admin-reports" class="admin-content-area">
+        <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color); margin-bottom: 2rem;">Master Analytical Reports</h1>
+         <div class="admin-table-container" style="padding: 4rem; text-align: center; color: #94a3b8;">
+          <i data-feather="bar-chart-2" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+          <h3>Global Tracking Engine</h3>
+          <p>Explicit Server-level configurations output globally authenticated reporting dynamically.</p>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+
+  <!-- Active Component Overlay Z-Indexed perfectly mapping -->
+  <div class="modal-overlay" id="addCourseModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem;">Register New Valid Course Mapping</h3>
+        <button class="modal-close" id="closeAddCourseModal"><i data-feather="x"></i></button>
+      </div>
+      
+      <form id="addCourseForm">
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Course Identification Code</label>
+            <input type="text" required placeholder="e.g. CS405" style="text-transform: uppercase;">
+          </div>
+          <div class="form-group" style="flex: 2;">
+            <label>Exact Course Title</label>
+            <input type="text" required placeholder="Full explicit name format...">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Mapping Department Parameters</label>
+          <select required>
+            <option>Computer Engineering (CE)</option>
+            <option>Mechanical Engineering (ME)</option>
+            <option>Civil Engineering (CIV)</option>
+            <option>Applied Mathematics Division</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Assigned Authenticated Instructor (ID or Valid Email)</label>
+          <input type="email" required placeholder="e.g. ramesh.k@sutu.edu">
+        </div>
+
+        <div class="form-group">
+          <label>Public Syllabus Description Hook</label>
+          <textarea id="addCourseDesc" placeholder="Write course structural definitions cleanly..." style="min-height: 100px; padding:0.8rem; width:100%; border:1px solid #e2e8f0; border-radius:8px;"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Exam Fees (₹)</label>
+          <input type="number" id="addCourseFees" required placeholder="e.g. 1500" min="0" value="0">
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;"><i data-feather="database" style="width: 16px; margin-right: 0.5rem;"></i> Publish Explicit Valid Object</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Register User Modal -->
+  <div class="modal-overlay" id="registerUserModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem;">Register New System User</h3>
+        <button class="modal-close" id="closeRegisterUserModal"><i data-feather="x"></i></button>
+      </div>
+      <form id="registerUserForm">
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Full Name</label>
+            <input type="text" id="regUserName" required placeholder="e.g. Rahul Sharma">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Identity Email</label>
+            <input type="email" id="regUserEmail" required placeholder="e.g. user@sutu.edu">
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Role Constraint</label>
+            <select id="regUserRole" required>
+              <option value="Student">Student</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Department Map</label>
+            <select id="regUserDept" required>
+              <option>Computer Eng.</option>
+              <option>Mechanical Eng.</option>
+              <option>Civil Eng.</option>
+              <option>Applied Mathematics</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;"><i data-feather="user-plus" style="width: 16px; margin-right: 0.5rem;"></i> Register User</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit User Modal -->
+  <div class="modal-overlay" id="editUserModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem;">Edit User Details</h3>
+        <button class="modal-close" id="closeEditUserModal"><i data-feather="x"></i></button>
+      </div>
+      <form id="editUserForm">
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Full Name</label>
+            <input type="text" id="editUserName" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Identity Email</label>
+            <input type="email" id="editUserEmail" required>
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Role Constraint</label>
+            <select id="editUserRole" required>
+              <option value="Student">Student</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Department Map</label>
+            <select id="editUserDept" required>
+              <option>Computer Eng.</option>
+              <option>Mechanical Eng.</option>
+              <option>Civil Eng.</option>
+              <option>Applied Mathematics</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Account Status</label>
+          <select id="editUserStatus" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;"><i data-feather="check" style="width: 16px; margin-right: 0.5rem;"></i> Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteConfirmModal">
+    <div class="modal-content" style="max-width: 450px; text-align: center;">
+      <div style="margin-bottom: 1.5rem;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;"><i data-feather="alert-triangle" style="width: 30px; height: 30px;"></i></div>
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.3rem; margin-bottom: 0.5rem;">Confirm Deletion</h3>
+        <p id="deleteConfirmText" style="color: #64748b;">Are you sure you want to delete this item? This action cannot be undone.</p>
+      </div>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn" id="cancelDeleteBtn" style="background-color: #f1f5f9; color: #475569; padding: 0.7rem 1.5rem; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; font-weight: 600;">Cancel</button>
+        <button class="btn" id="confirmDeleteBtn" style="background-color: #ef4444; color: white; padding: 0.7rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Course Modal -->
+  <div class="modal-overlay" id="editCourseModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem;">Edit Course Details</h3>
+        <button class="modal-close" id="closeEditCourseModal"><i data-feather="x"></i></button>
+      </div>
+      <form id="editCourseForm">
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Course Code</label>
+            <input type="text" id="editCourseCode" required style="text-transform: uppercase;">
+          </div>
+          <div class="form-group" style="flex: 2;">
+            <label>Course Title</label>
+            <input type="text" id="editCourseTitle" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Department</label>
+          <select id="editCourseDept" required>
+            <option>Computer Engineering (CE)</option>
+            <option>Mechanical Engineering (ME)</option>
+            <option>Civil Engineering (CIV)</option>
+            <option>Applied Mathematics Division</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Instructor Email</label>
+          <input type="email" id="editCourseInstructor" required>
+        </div>
+        <div class="form-group">
+          <label>Exam Fees (₹)</label>
+          <input type="number" id="editCourseFees" required placeholder="e.g. 1500" min="0" value="0">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;"><i data-feather="check" style="width: 16px; margin-right: 0.5rem;"></i> Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <script>feather.replace();</script>
+
+  <!-- Add Question Modal -->
+  <div class="modal-overlay" id="addQuestionModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem;">Add New Question</h3>
+        <button class="modal-close" id="closeAddQuestionModal"><i data-feather="x"></i></button>
+      </div>
+      <form id="addQuestionForm">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label>Question Text</label>
+          <textarea id="qText" required rows="2" style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px;"></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group"><label>Option 1</label><input type="text" id="qOpt0" required style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px;"></div>
+          <div class="form-group"><label>Option 2</label><input type="text" id="qOpt1" required style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px;"></div>
+          <div class="form-group"><label>Option 3</label><input type="text" id="qOpt2" required style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px;"></div>
+          <div class="form-group"><label>Option 4</label><input type="text" id="qOpt3" required style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px;"></div>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label>Correct Answer</label>
+          <select id="qCorrect" required style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px;">
+            <option value="0">Option 1 (A)</option>
+            <option value="1">Option 2 (B)</option>
+            <option value="2">Option 3 (C)</option>
+            <option value="3">Option 4 (D)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;"><i data-feather="check" style="width: 16px; margin-right: 0.5rem;"></i> Append to Test Pipeline</button>
+      </form>
+    </div>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/mobile.js"></script>
+<script src="../js/branding.js?v=8"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/sidebar-toggle.js"></script>
+<script src="../js/admin.js?v=3"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

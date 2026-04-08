@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Create an Account">
+  <title>SUTU LMS - Register</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Specific layouts for the register form card */
+    .register-card { max-width: 650px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
+    
+    .radio-group label {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">
+        SUTU <span>LMS</span>
+      </a>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="#">Pavilions</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4)">Login</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-content auth-page">
+    <div class="auth-card register-card">
+      <h2 style="margin-bottom: 0.5rem; font-family: var(--font-heading); color: var(--primary-color);">Create an Account</h2>
+      <p style="color: #64748b; margin-bottom: 2rem; font-size: 0.95rem;">Join the SUTU Learning Management System.</p>
+      
+      <div id="errorSummary" class="error-summary">Please fix the errors below before continuing.</div>
+
+      <form id="registerForm" class="auth-form" action="#" method="POST" novalidate>
+
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
+          <div id="nameError" class="error-message">Full Name is required.</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="enrollmentNo" id="idLabel">University Personnel ID</label>
+            <input type="text" id="enrollmentNo" name="enrollmentNo" placeholder="e.g., SUTU-2026-X1">
+            <div id="enrollmentError" class="error-message">Personnel ID is required.</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">University Email</label>
+            <input type="email" id="email" name="email" placeholder="personnel@sutu.edu">
+            <div id="emailError" class="error-message">Email is required.</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="department">Department</label>
+            <select id="department" name="department">
+              <option value="">Select your academy pavilion</option>
+              <option value="Information Control">Information Control & Data Science</option>
+              <option value="Structural Engineering">Structural Engineering (Metropolis)</option>
+              <option value="Electronic Sovereignty">Electronic Sovereignty</option>
+              <option value="Applied Cybernetics">Applied Cybernetics</option>
+              <option value="Political Engineering">Political Engineering</option>
+              <option value="Industrial Automation">Industrial Automation (Berlin Core)</option>
+            </select>
+            <div id="departmentError" class="error-message">Please select a department.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Role</label>
+            <div class="radio-group" style="display: flex; gap: 1.5rem; margin-top: 1rem; padding: 0.5rem 0;">
+              <label style="display: flex; align-items: center; gap: 0.4rem; font-weight: 400;">
+                <input type="radio" name="role" value="Student"> Student
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.4rem; font-weight: 400;">
+                <input type="radio" name="role" value="Faculty"> Faculty
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.4rem; font-weight: 400;">
+                <input type="radio" name="role" value="Admin"> Admin
+              </label>
+            </div>
+            <div id="roleError" class="error-message">Please select a role.</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Create robust password">
+            <div id="passwordError" class="error-message">Password is required.</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+            <div id="confirmError" class="error-message">Please confirm your password.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 1rem; padding: 1rem;">Register Now</button>
+      </form>
+
+      <div class="auth-links" style="margin-top: 1.5rem; text-align: center;">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Area -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h3>SUTU LMS</h3>
+        <p class="footer-desc">Empowering Soviet Union Technological University students with unified digital instruction and interactive online protocols.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact">
+          <li><strong>Address:</strong> Alexanderplatz 1, Berlin, Germany 10178</li>
+          <li><strong>Email:</strong> kommissariat@sutu.edu</li>
+          <li><strong>Phone:</strong> +49 30 123 456 78</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Form Validation Script -->
+  <script src="../js/register.js"></script>
+<script src="../js/mobile.js"></script>
+<script src="../js/branding.js?v=8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script>
+    // Handle Role-based UI changes
+    document.querySelectorAll('input[name="role"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const idLabel = document.getElementById('idLabel');
+        const enrollmentNo = document.getElementById('enrollmentNo');
+        if (e.target.value === 'Student') {
+          idLabel.textContent = 'University Enrollment Number';
+          enrollmentNo.placeholder = 'e.g., 2023123456';
+        } else {
+          idLabel.textContent = 'Employee ID / Staff Code';
+          enrollmentNo.placeholder = 'e.g., EMP12345';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Technical Doubt Protocols and Instant Academy Support">
+  <title>SUTU LMS - Technical Doubt Resolution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <!-- Auth Guard -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+ 
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo"><a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a></div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList"></div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span id="headerUserName" class="user-name" style="color: var(--bg-color); font-weight: 500;">Personnel</span>
+          <div id="headerUserAvatar" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">UN</div>
+        </div>
+      </div>
+    </div>
+  </header>
+ 
+  <div class="dashboard-container">
+ 
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+      <div class="sidebar-logo">
+        <img src="../assets/university-logo.png" alt="SUTU Logo">
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html"><i data-feather="grid" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard</span></a></li>
+        <li><a href="courses.html"><i data-feather="book-open" style="margin-right: 12px; width: 20px;"></i> <span>Academy Pavilions</span></a></li>
+        <li><a href="assignment.html"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>Assignments</span></a></li>
+        <li><a href="grades.html"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Academy Grades</span></a></li>
+        <li><a href="doubts.html" class="active"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="profile.html"><i data-feather="user" style="margin-right: 12px; width: 20px;"></i> <span>Profile</span></a></li>
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='../index.html';" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Logout</span></a></li>
+      </ul>
+    </aside>
+ 
+    <!-- Main Content -->
+    <main class="dashboard-content" style="display: flex; flex-direction: column;">
+ 
+      <!-- Page Header -->
+      <div class="doubt-page-header">
+        <div>
+          <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem;">
+            <i data-feather="help-circle" style="width: 28px; color: var(--accent-color);"></i> Technical Doubt Sessions
+          </h1>
+          <p style="color: #64748b; margin-top: 0.25rem; font-size: 0.95rem;">Resolve protocol queries with peers & Kommissars via live streams</p>
+        </div>
+        <button class="btn btn-primary" id="openDoubtModalBtn" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; font-size: 1rem;">
+          <i data-feather="plus-circle" style="width: 18px;"></i> Broadcast Doubt
+        </button>
+      </div>
+ 
+      <!-- Subject Filter Bar -->
+      <div class="doubt-filter-bar" id="doubtFilterBar">
+        <button class="doubt-filter-chip active" data-subject="all">All Queries</button>
+        <button class="doubt-filter-chip" data-subject="Information Control">Information Control</button>
+        <button class="doubt-filter-chip" data-subject="Electronic Sovereignty">Electronic Sovereignty</button>
+        <button class="doubt-filter-chip" data-subject="Applied Cybernetics">Cybernetics</button>
+        <button class="doubt-filter-chip" data-subject="Metropolis Structural">Structural</button>
+        <button class="doubt-filter-chip" data-subject="Political Engineering">Political</button>
+        <button class="doubt-filter-chip" data-subject="Other">Other</button>
+      </div>
+ 
+      <!-- Split Layout -->
+      <div class="doubt-layout">
+ 
+        <!-- Left Panel: Doubt Feed -->
+        <div class="doubt-feed-panel" id="doubtFeedPanel">
+          <!-- Dynamically populated by doubts.js -->
+          <div class="doubt-loading" id="doubtLoading">
+            <div class="doubt-loading-spinner"></div>
+            <span>Loading secure feed...</span>
+          </div>
+        </div>
+ 
+        <!-- Right Panel: Doubt Detail -->
+        <div class="doubt-detail-panel" id="doubtDetailPanel" style="display: none;">
+ 
+          <div class="doubt-detail-header">
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                <span class="doubt-subject-badge" id="detailSubjectBadge">Subject</span>
+                <span class="doubt-status-badge" id="detailStatusBadge">Open</span>
+              </div>
+              <h2 id="detailTitle" style="color: var(--primary-color); font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 0.5rem;">Query Title</h2>
+              <p id="detailMeta" style="color: #64748b; font-size: 0.85rem;">Broadcast by Personnel - Date</p>
+            </div>
+            <button class="doubt-call-btn" id="startCallBtn" title="Start a live video stream to resolve this query">
+              <i data-feather="video" style="width: 20px;"></i>
+              <span>Live Stream</span>
+              <div class="call-btn-pulse"></div>
+            </button>
+          </div>
+ 
+          <!-- Doubt Content with optional image -->
+          <div class="doubt-content-area" id="detailContentArea">
+            <div class="doubt-question-text" id="detailQuestionText">Question text here...</div>
+            <div class="doubt-image-preview" id="detailImagePreview" style="display: none;">
+              <img id="detailImage" src="" alt="Doubt reference image">
+            </div>
+          </div>
+ 
+          <!-- Replies Chat Area -->
+          <div class="doubt-replies-area" id="doubtRepliesArea">
+            <!-- Dynamically populated -->
+          </div>
+ 
+          <!-- Reply Input -->
+          <div class="doubt-reply-box">
+            <input type="text" id="doubtReplyInput" class="reply-input" placeholder="Type your answer or clarification...">
+            <button class="reply-btn" id="sendDoubtReplyBtn">
+              <i data-feather="send" style="width: 18px;"></i>
+            </button>
+          </div>
+        </div>
+ 
+        <!-- Empty State -->
+        <div class="doubt-detail-panel doubt-empty-state" id="doubtEmptyState" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+          <div style="color: #94a3b8;">
+            <i data-feather="help-circle" style="width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.5;"></i>
+            <h3 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 0.5rem;">Select a query</h3>
+            <p style="max-width: 300px; font-size: 0.95rem;">Click on any query from the left panel to view details, replies, and start a live secure stream.</p>
+          </div>
+        </div>
+ 
+      </div>
+    </main>
+  </div>
+ 
+  <!-- Ask a Doubt Modal -->
+  <div class="modal-overlay" id="newDoubtModal">
+    <div class="modal-content" style="max-width: 560px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-feather="help-circle" style="width: 22px; color: var(--accent-color);"></i> Broadcast a Query
+        </h3>
+        <button class="modal-close" id="closeDoubtModalBtn"><i data-feather="x"></i></button>
+      </div>
+ 
+      <form id="newDoubtForm">
+        <div class="form-group">
+          <label for="doubtTitle">What's your query about?</label>
+          <input type="text" id="doubtTitle" required placeholder="e.g., Optimizing asymptotic complexity... ">
+        </div>
+ 
+        <div class="form-group">
+          <label for="doubtSubject">Academy Pavilion</label>
+          <select id="doubtSubject">
+            <option value="Information Control">Information Control</option>
+            <option value="Electronic Sovereignty">Electronic Sovereignty</option>
+            <option value="Applied Cybernetics">Applied Cybernetics</option>
+            <option value="Metropolis Structural">Structural Engineering</option>
+            <option value="Political Engineering">Political Engineering</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+ 
+        <div class="form-group">
+          <label for="doubtDescription">Describe your query</label>
+          <textarea id="doubtDescription" required placeholder="Explain your query clearly. Include protocols, steps you've tried..." style="min-height: 120px;"></textarea>
+        </div>
+ 
+        <div class="form-group">
+          <label for="doubtImageUrl">Reference Reference Image <span style="font-size: 0.85rem; color: #64748b; font-weight: 400; font-family: 'Poppins', sans-serif;">Soviet Union Technological University, Berlin</span></label>
+          <input type="text" id="doubtImageUrl" placeholder="Paste a link to a screenshot of the problem...">
+          <div id="imagePreviewArea" style="display:none; margin-top: 0.75rem; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
+            <img id="modalImagePreview" src="" alt="Preview" style="width: 100%; max-height: 200px; object-fit: contain; background: #f1f5f9;">
+          </div>
+        </div>
+ 
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.8rem; font-size: 1.05rem;">
+          <i data-feather="send" style="width: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i> Post Query
+        </button>
+      </form>
+    </div>
+  </div>
+ 
+  <!-- Toast Notification -->
+  <div id="doubtToast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; color: white; padding: 1rem 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; align-items: center; gap: 0.5rem;">
+    <i id="doubtToastIcon" data-feather="info" style="width: 20px;"></i>
+    <span id="doubtToastMessage" style="font-weight: 500;">Notification</span>
+  </div>
+ 
+  <!-- Scripts -->
+  <script>feather.replace();</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/notifications.js?v=6"></script>
+  <script src="../js/mobile.js"></script>
+  <script src="../js/branding.js?v=8"></script>
+  <script src="../js/sidebar-toggle.js"></script>
+  <script src="../js/doubts.js"></script>
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="logo">
+          <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+            <img src="../assets/university-logo.png" alt="SUTU Logo" style="height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 1.8rem; font-weight: 700; color: var(--bg-color);">SUTU <span style="color: var(--accent-color);">LMS</span></span>
+            </div>
+          </a>
+        </div>
+        <p class="footer-desc">Empowering Soviet Union Technological University students with unified digital instruction and interactive online protocols.</p>
+      </div>
+      <div class="footer-col">
+          <h3>Contact Info</h3>
+          <ul class="footer-contact">
+              <li><strong>Address:</strong> Alexanderplatz 1, Berlin, Germany 10178</li>
+              <li><strong>Email:</strong> kommissariat@sutu.edu</li>
+              <li><strong>Phone:</strong> +49 30 123 456 78</li>
+          </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University. All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

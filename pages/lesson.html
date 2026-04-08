@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Focused Training Protocol Viewer">
+  <title>SUTU LMS - Protocol Viewer</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body style="overflow: hidden;"> <!-- Crucial to disable master body scrolling to accommodate dual-scroll flow -->
+  <!-- Auth Guard: Must be first script on every protected page -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  
+  <!-- Simplified Mini Navbar for focused Viewer -->
+  <header class="navbar" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); background-color: var(--primary-color);">
+    <div class="logo">
+      <a href="courses.html" style="font-size: 1.1rem; color: #ffffff; font-family: var(--font-body); font-weight: 500; display:flex; align-items:center;">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">
+        <i data-feather="arrow-left" style="margin-right: 0.5rem; width: 18px;"></i> Back to Pavilion
+      </a>
+    </div>
+    
+    <div id="lessonCourseTitle" style="font-family: var(--font-heading); font-weight: 600; color: #ffffff !important; flex: 1; text-align: center; font-size: 1.1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 1rem;">
+      Instruction Protocol
+    </div>
+
+    <style>
+      @media (max-width: 768px) {
+        #lessonCourseTitle { display: none; }
+        .navbar { justify-content: space-between; padding: 0.75rem 1rem; }
+      }
+    </style>
+
+    <div class="nav-actions">
+      <!-- Simulated Active User Profile -->
+      <div style="width: 35px; height: 35px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700;" class="user-avatar user-profile-trigger">UN</div>
+    </div>
+  </header>
+
+  <div class="lesson-layout">
+    
+    <!-- Deep Sidebar Navigation List -->
+    <aside class="lesson-sidebar">
+      <div class="lesson-sidebar-header">
+        <h3>Protocol Architecture</h3>
+        <!-- Overall Trackable Progress block -->
+        <div class="course-progress-container">
+          <div class="progress-text">
+            <span>Training Progress</span>
+            <span id="progressText">0%</span>
+          </div>
+          <div class="course-progress-bar">
+            <div class="course-progress-fill" id="progressFill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scrollable Lesson Map -->
+      <div class="lesson-list-container">
+        <!-- Content injected by lesson.js -->
+      </div>
+    </aside>
+
+    <!-- Dynamic Main Content Window Player -->
+    <main class="lesson-content-area">
+      
+      <!-- Dedicated Absolute-Ratio Video Player box -->
+      <div class="video-container" id="lessonVideoEmbed">
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; color: #fff; font-family: var(--font-heading);">
+          <div style="text-align: center;">
+            <i data-feather="video" style="width: 48px; height: 48px; margin-bottom: 1rem; color: var(--accent-color);"></i>
+            <h3>Loading Instruction Protocol...</h3>
+            <p style="color: #64748b; font-size: 0.9rem;">Initializing secure stream. Please standby.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes, Transcripts & Deep Content Below -->
+      <div class="lesson-text-content">
+        <div class="lesson-header-main">
+          <h1 id="lessonMainTitle">Initializing...</h1>
+          <div id="lessonInstructorText" style="color: #64748b; font-weight: 500; font-size: 0.95rem;">Academy Kommissar: Assigned Faculty &bull; Status: Active &bull; Format: Secure Stream</div>
+        </div>
+
+        <div id="lessonDescriptionBox">
+          <p>Welcome to the specialized training module within the SUTU domain. Ensure all distractions are minimized for maximum information retention.</p>
+        </div>
+
+        <!-- Dynamic Resources can be added here if needed -->
+      </div>
+      
+      <!-- Lower Progression Footer logic mapping Next/Complete operations -->
+      <div class="lesson-actions">
+        <button id="prevLessonBtn" class="btn btn-outline" style="border-color: #cbd5e1; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-feather="chevron-left" style="width: 18px;"></i> Previous
+        </button>
+
+        <button id="markCompleteBtn" class="btn btn-primary" style="background-color: #10b981; border-color: #10b981; display: flex; align-items: center; justify-content:center; gap: 0.5rem; padding: 0.8rem 2rem; min-width: 250px;">
+          <i data-feather="check-circle" style="width: 20px;"></i> Mark as Complete
+        </button>
+
+        <button id="nextLessonBtn" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
+          Next <i data-feather="chevron-right" style="width: 18px;"></i>
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Interface Render Script Triggers -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/mobile.js"></script>
+<script src="../js/branding.js?v=8"></script>
+<script>
+  feather.replace();
+
+  const userName = localStorage.getItem("userName") || "Personnel";
+  const userInitials = userName.split(" ").map(n => n[0]).join("").substring(0,2).toUpperCase();
+
+  const avatarEl = document.querySelector(".user-avatar");
+  if(avatarEl) avatarEl.textContent = userInitials;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const courseId = urlParams.get('course');
+  
+  // Core lesson logic is now entirely handled within ../js/lesson.js to prevent race conditions
+</script>
+<script src="../js/lesson.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Official Campus Announcements">
+  <title>SUTU LMS - Announcements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    /* Modal Overlay */
+    .ann-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .ann-modal-box {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to  { transform: translateY(0);  opacity: 1; }
+    }
+    .ann-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .ann-modal-header h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      color: var(--primary-color);
+    }
+    .ann-modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      padding: 4px;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+    .ann-modal-close:hover { color: #ef4444; }
+    .ann-form-group {
+      margin-bottom: 1.2rem;
+    }
+    .ann-form-group label {
+      display: block;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+    }
+    .ann-form-group input[type="text"],
+    .ann-form-group select,
+    .ann-form-group textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: #1e293b;
+      background: #f8fafc;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+    .ann-form-group input:focus,
+    .ann-form-group select:focus,
+    .ann-form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.08);
+      background: white;
+    }
+    .ann-form-group textarea { min-height: 110px; resize: vertical; }
+    .ann-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+    }
+    .ann-checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent-color);
+    }
+    .ann-checkbox-row label {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #475569;
+      cursor: pointer;
+    }
+    .ann-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    /* Toast */
+    #announcementToast {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      color: white;
+      padding: 0.8rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      z-index: 9999;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to  { opacity: 1; transform: translateY(0); }
+    }
+    /* New Announcement Button */
+    #newAnnouncementBtn {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.2rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Guard: Must be first script on every protected page -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+
+  <header class="navbar">
+    <div class="logo"><a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a></div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html">Pavilions</a></li>
+      <li><a href="announcements.html" style="color: var(--accent-color);">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList">
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span id="headerUserName" class="user-name" style="color: var(--bg-color); font-weight: 500;">John Doe</span>
+          <div id="headerUserAvatar" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">JD</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+      <div class="sidebar-logo">
+        <img src="../assets/university-logo.png" alt="University Logo">
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html"><i data-feather="grid" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard</span></a></li>
+        <li><a href="courses.html"><i data-feather="book-open" style="margin-right: 12px; width: 20px;"></i> <span>My Pavilions</span></a></li>
+        <li><a href="assignment.html"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>Assignments</span></a></li>
+        <li><a href="grades.html"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Grades</span></a></li>
+        <li><a href="announcements.html" class="active"><i data-feather="bell" style="margin-right: 12px; width: 20px;"></i> <span>Announcements</span></a></li>
+        <li><a href="doubts.html"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="profile.html"><i data-feather="user" style="margin-right: 12px; width: 20px;"></i> <span>Profile</span></a></li>
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='../index.html';" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="dashboard-content" style="display: flex; flex-direction: column;">
+
+      <div class="announcements-header-wrapper">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:0.5rem;">
+          <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color); margin:0;">Announcements &amp; Circulars</h1>
+          <button class="btn btn-primary" id="newAnnouncementBtn">
+            <i data-feather="plus" style="width:16px;"></i> New Announcement
+          </button>
+        </div>
+
+        <div class="announcements-filter-bar" id="categoryFilters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="exam">Exams</button>
+          <button class="filter-btn" data-filter="assignment">Assignments</button>
+          <button class="filter-btn" data-filter="holiday">Holidays</button>
+          <button class="filter-btn" data-filter="general">General</button>
+        </div>
+      </div>
+
+      <!-- Vertical Feed -->
+      <div class="announcements-feed" id="feedContainer"></div>
+
+    </main>
+  </div>
+
+  <!-- ===================== NEW ANNOUNCEMENT MODAL ===================== -->
+  <div class="ann-modal-overlay" id="newAnnouncementModal">
+    <div class="ann-modal-box">
+      <div class="ann-modal-header">
+        <h3>ðŸ“¢ Post New Announcement</h3>
+        <button class="ann-modal-close" id="closeNewModalBtn"><i data-feather="x"></i></button>
+      </div>
+      <form id="newAnnouncementForm">
+        <div class="ann-form-group">
+          <label for="newAnnTitle">Title *</label>
+          <input type="text" id="newAnnTitle" placeholder="Enter announcement title..." required>
+        </div>
+        <div class="ann-form-group">
+          <label for="newAnnCategory">Category *</label>
+          <select id="newAnnCategory" required>
+            <option value="exam">Exam</option>
+            <option value="assignment">Assignment</option>
+            <option value="holiday">Holiday</option>
+            <option value="general" selected>General</option>
+          </select>
+        </div>
+        <div class="ann-checkbox-row">
+          <input type="checkbox" id="newAnnImportant">
+          <label for="newAnnImportant">âš ï¸ Mark as Important</label>
+        </div>
+        <div class="ann-form-group">
+          <label for="newAnnContent">Content *</label>
+          <textarea id="newAnnContent" placeholder="Write the full announcement content..." required></textarea>
+        </div>
+        <div class="ann-modal-footer">
+          <button type="button" class="btn btn-outline" id="cancelNewModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-feather="send" style="width:15px;"></i> Post Announcement
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== EDIT ANNOUNCEMENT MODAL ===================== -->
+  <div class="ann-modal-overlay" id="editAnnouncementModal">
+    <div class="ann-modal-box">
+      <div class="ann-modal-header">
+        <h3>âœï¸ Edit Announcement</h3>
+        <button class="ann-modal-close" id="closeEditModalBtn"><i data-feather="x"></i></button>
+      </div>
+      <form id="editAnnouncementForm">
+        <div class="ann-form-group">
+          <label for="editAnnTitle">Title *</label>
+          <input type="text" id="editAnnTitle" placeholder="Announcement title..." required>
+        </div>
+        <div class="ann-form-group">
+          <label for="editAnnCategory">Category *</label>
+          <select id="editAnnCategory" required>
+            <option value="exam">Exam</option>
+            <option value="assignment">Assignment</option>
+            <option value="holiday">Holiday</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        <div class="ann-checkbox-row">
+          <input type="checkbox" id="editAnnImportant">
+          <label for="editAnnImportant">âš ï¸ Mark as Important</label>
+        </div>
+        <div class="ann-form-group">
+          <label for="editAnnContent">Content *</label>
+          <textarea id="editAnnContent" placeholder="Announcement content..." required></textarea>
+        </div>
+        <div class="ann-modal-footer">
+          <button type="button" class="btn btn-outline" id="cancelEditModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-feather="check" style="width:15px;"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="announcementToast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/mobile.js"></script>
+<script src="../js/branding.js?v=8"></script>
+<script src="../js/sidebar-toggle.js"></script>
+<script src="../js/announcements.js?v=4"></script>
+</body>
+</html>
+
+
+
+
+
+

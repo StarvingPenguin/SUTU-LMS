@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUTU LMS - Complete Architecture Sitemap</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .sitemap-container {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: var(--box-shadow-standard);
+    }
+    .sitemap-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .sitemap-header h1 {
+      color: var(--primary-color);
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .sitemap-header p {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+    .sitemap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .sitemap-category {
+      background-color: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .sitemap-category h3 {
+      color: var(--primary-color);
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 0.5rem;
+    }
+    .sitemap-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sitemap-list li {
+      margin-bottom: 0.8rem;
+    }
+    .sitemap-list a {
+      color: #334155;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s ease;
+      font-weight: 500;
+    }
+    .sitemap-list a:hover {
+      color: var(--accent-color);
+    }
+    
+  </style>
+</head>
+<body style="background-color: #eff6ff;">
+  
+  <!-- Navbar Override explicitly mapping -->
+  <header class="navbar" style="position: sticky; top: 0; z-index: 100;">
+    <div class="logo">
+      <a href="index.html">
+        <img src="assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a>
+    </div>
+    <div class="nav-actions">
+      <a href="pages/login.html" class="btn btn-primary" style="background-color: var(--accent-color); color: var(--primary-color);">Return to Login</a>
+    </div>
+  </header>
+
+  <div class="sitemap-container">
+    <div class="sitemap-header">
+      <h1>Platform Master Sitemap</h1>
+      <p>Comprehensive routing directory for the SUTU Learning Management System Architecture.</p>
+    </div>
+
+    <div class="sitemap-grid">
+      
+      <div class="sitemap-category">
+        <h3><i data-feather="monitor"></i> Core Public Routes</h3>
+        <ul class="sitemap-list">
+          <li><a href="index.html"><i data-feather="home" style="width: 16px;"></i> Front Landing Page</a></li>
+          <li><a href="pages/login.html"><i data-feather="log-in" style="width: 16px;"></i> Secure Login</a></li>
+          <li><a href="pages/register.html"><i data-feather="user-plus" style="width: 16px;"></i> User Registration</a></li>
+          <li><a href="sitemap.html"><i data-feather="map" style="width: 16px;"></i> Platform Sitemap</a></li>
+          <li><strong>Support:</strong> support@SUTU.edu</li>
+        </ul>
+      </div>
+
+      <div class="sitemap-category">
+        <h3><i data-feather="book-open"></i> Academic Matrix</h3>
+        <ul class="sitemap-list">
+          <li><a href="pages/dashboard.html"><i data-feather="grid" style="width: 16px;"></i> Student Dashboard</a></li>
+          <li><a href="pages/courses.html"><i data-feather="bookmark" style="width: 16px;"></i> Course Catalog Matrix</a></li>
+          <li><a href="pages/course-detail.html"><i data-feather="file-text" style="width: 16px;"></i> Course Details View</a></li>
+          <li><a href="pages/lesson.html"><i data-feather="play-circle" style="width: 16px;"></i> Active Lesson Viewer</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-category">
+        <h3><i data-feather="award"></i> Evaluation Modules</h3>
+        <ul class="sitemap-list">
+          <li><a href="pages/assignment.html"><i data-feather="file-plus" style="width: 16px;"></i> Assignment Uploads</a></li>
+          <li><a href="pages/quiz.html"><i data-feather="check-square" style="width: 16px;"></i> Live Quiz Engine</a></li>
+          <li><a href="pages/grades.html"><i data-feather="bar-chart-2" style="width: 16px;"></i> Academic Grades</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-category">
+        <h3><i data-feather="message-circle"></i> Broadcast & Comms</h3>
+        <ul class="sitemap-list">
+          <li><a href="pages/announcements.html"><i data-feather="bell" style="width: 16px;"></i> Global Announcements</a></li>
+          <li><a href="pages/forum.html"><i data-feather="users" style="width: 16px;"></i> Discussion Forum</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-category">
+        <h3><i data-feather="shield"></i> Administrative Core</h3>
+        <ul class="sitemap-list">
+          <li><a href="pages/admin.html"><i data-feather="sliders" style="width: 16px;"></i> Central Admin Control Panel</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Ensure logic resolves linearly -->
+  <script>feather.replace();</script>
+  <script src="js/mobile.js"></script>
+  <script src="js/branding.js?v=4"></script>
+</body>
+</html>
+
+
+
+

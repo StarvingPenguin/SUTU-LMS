@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Explore Academy Pavilions and Knowledge Modules">
+  <title>SUTU LMS - Academy Pavilions</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <!-- Public Course Catalog -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html" style="color: var(--accent-color)">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList">
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span id="headerUserName" class="user-name" style="color: var(--bg-color); font-weight: 500;">Personnel</span>
+          <div id="headerUserAvatar" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">UN</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+      <div class="sidebar-logo">
+        <img src="../assets/university-logo.png" alt="SUTU Logo">
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html"><i data-feather="grid" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard</span></a></li>
+        <li><a href="courses.html" class="active"><i data-feather="book-open" style="margin-right: 12px; width: 20px;"></i> <span>Academy Pavilions</span></a></li>
+        <li><a href="assignment.html"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>Assignments</span></a></li>
+        <li><a href="grades.html"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Academy Grades</span></a></li>
+        <li><a href="announcements.html"><i data-feather="bell" style="margin-right: 12px; width: 20px;"></i> <span>Announcements</span></a></li>
+        <li><a href="doubts.html"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="profile.html"><i data-feather="user" style="margin-right: 12px; width: 20px;"></i> <span>Profile</span></a></li>
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='../index.html';" id="logoutBtn" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="dashboard-content" style="padding: 3rem 5%; min-height: calc(100vh - 80px); background-color: #f8fafc;">
+    <div style="margin-bottom: 2.5rem;">
+      <h1 style="font-family: var(--font-heading); font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">Academy pavilions</h1>
+      <p style="color: #64748b; font-size: 1.1rem;">Explore the comprehensive range of specialized modules offered by SUTU.</p>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="controls-toolbar">
+      <div class="search-box">
+        <i data-feather="search" class="search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search by protocol name or keyword...">
+      </div>
+      <div class="filter-dropdowns">
+        <select id="departmentFilter" class="filter-select">
+          <option value="all">All Pavilions</option>
+          <option value="Information Control">Information Control & Data Science</option>
+          <option value="Structural Engineering">Structural Engineering (Metropolis)</option>
+          <option value="Electronic Sovereignty">Electronic Sovereignty</option>
+          <option value="Applied Cybernetics">Applied Cybernetics</option>
+          <option value="Political Engineering">Political Engineering</option>
+          <option value="Industrial Automation">Industrial Automation</option>
+        </select>
+        <select id="semesterFilter" class="filter-select">
+          <option value="all">All Tiers</option>
+          <option value="Sem 1">Tier 1</option>
+          <option value="Sem 2">Tier 2</option>
+          <option value="Sem 3">Tier 3</option>
+          <option value="Sem 4">Tier 4</option>
+          <option value="Sem 5">Tier 5</option>
+          <option value="Sem 6">Tier 6</option>
+          <option value="Sem 7">Tier 7</option>
+          <option value="Sem 8">Tier 8</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 3-Column Grid for Courses - rendered dynamically by courses.js -->
+    <div class="course-grid catalog-grid" id="courseGrid">
+      <!-- Course cards are generated dynamically by courses.js -->
+    </div>
+    
+    <!-- Empty State Message -->
+    <div id="noResultsMessage" style="display: none; text-align: center; padding: 5rem 2rem; color: #64748b; background-color: white; border-radius: 12px; margin-top: 2rem;">
+      <i data-feather="search" style="width: 48px; height: 48px; margin-bottom: 1rem; color: #cbd5e1;"></i>
+      <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem;">No protocols found</h3>
+      <p>Try adjusting your search keywords or removing some filters.</p>
+    </div>
+    </main>
+  </div>
+
+  <!-- Footer Area -->
+  <footer class="footer">
+    <div class="footer-container">
+      
+      <div class="footer-col" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="logo">
+          <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+            <img src="../assets/university-logo.png" alt="SUTU Logo" style="height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 0.85rem; color: #64748b; font-weight: 400; font-family: 'Poppins', sans-serif;">Soviet Union Technological University, Berlin</span>
+              <span style="font-size: 1.5rem; font-weight: 700; color: var(--bg-color);">SUTU <span style="color: var(--accent-color);">LMS</span></span>
+            </div>
+          </a>
+        </div>
+        <p class="footer-desc">Empowering SUTU personnel with world-class digital instruction.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="courses.html">Pavilions</a></li>
+          <li><a href="login.html">Access Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact">
+          <li><strong>Address:</strong> Karl-Marx-Allee, Berlin, Germany 10178</li>
+          <li><strong>Email:</strong> support@SUTU.edu</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University, Berlin. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>feather.replace();</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/notifications.js?v=6"></script>
+  <script src="../js/mobile.js"></script>
+  <script src="../js/branding.js?v=8"></script>
+  <script src="../js/sidebar-toggle.js"></script>
+  <script src="../js/payment.js"></script>
+  <script src="../js/courses.js?v=3"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

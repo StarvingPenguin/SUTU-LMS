@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="SUTU LMS &mdash; Learning Management System for Soviet Union Technological University">
+  <title>SUTU LMS &mdash; Global Technical Instruction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="assets/university-logo.png" alt="SUTU Logo" class="nav-logo">
+        SUTU <span>LMS</span>
+      </a>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pages/about.html">About</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="pages/login.html" class="btn btn-outline">Login</a>
+      <a href="pages/register.html" class="btn btn-primary">Register</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero">
+      <div class="hero-decor decor-top"></div>
+      <div class="hero-decor decor-bottom"></div>
+
+      <div class="hero-content" style="max-width: 900px; position: relative; z-index: 2;">
+        <h1 id="heroTitle" class="text-gradient" style="font-size: 4.5rem; margin-bottom: 1rem; line-height: 1.1;">Build Your Empire</h1>
+        <h2 style="color: #fff; font-size: 2.2rem; margin-bottom: 1.5rem; font-weight: 600;">SUTU <span style="color: var(--accent-color);">LMS</span></h2>
+        <p style="color: #cbd5e1; font-size: 1.2rem; margin-bottom: 2rem; line-height: 1.6;">
+          Access world-class courses, expert certifications, and interactive learning &mdash; all under the banner of SUTU.
+        </p>
+        </p>
+        <div class="hero-cta">
+          <a href="pages/login.html" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.2rem; border-radius: 50px; box-shadow: 0 10px 20px rgba(255, 153, 51, 0.3);">Get Started for Free</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic News Ticker -->
+    <div class="news-ticker-container">
+      <div class="news-ticker-label">LATEST NEWS</div>
+      <div class="news-ticker-content" id="dynamicNewsTicker">
+        <!-- Fallback content, will be replaced by JS -->
+        <div class="news-item">Admissions for 2026 Academic Year are now open</div>
+        <div class="news-item">New specialized courses added to Political Science</div>
+        <div class="news-item">Upcoming Unity Fest details announced on the dashboard</div>
+        <div class="news-item">Welcome to the upgraded SUTU LMS portal</div>
+      </div>
+    </div>
+
+    <!-- University Stats Section -->
+    <section class="university-stats-section">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-counter text-gradient">15,000+</div>
+          <div class="stat-label">Active Students</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-counter text-gradient">250+</div>
+          <div class="stat-label">Course Modules</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-counter text-gradient">120+</div>
+          <div class="stat-label">Expert Faculty</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-counter text-gradient">98%</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Courses Preview -->
+    <section style="padding: 5rem 10%; background: var(--bg-color);">
+      <div style="text-align: center; margin-bottom: 4rem;">
+        <h2 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;">Explore Our Top Courses</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">High-quality, university-graded courses designed for technical excellence.</p>
+      </div>
+      
+      <div id="dynamic-courses-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem;">
+        <!-- Mock Featured Cards -> dynamically filled via JS normally -->
+      </div>
+
+      <div style="text-align: center; margin-top: 4rem;">
+        <a href="pages/login.html" class="btn btn-primary" style="padding: 1rem 3rem;">View All Courses</a>
+      </div>
+    </section>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="logo">
+          <a href="index.html" style="display: flex; align-items: center; gap: 10px;">
+            <img src="assets/university-logo.png" alt="SUTU Logo" style="height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 1.8rem; font-weight: 700; color: var(--bg-color);">SUTU <span style="color: var(--accent-color);">LMS</span></span>
+            </div>
+          </a>
+        </div>
+        <p class="footer-desc">Empowering Soviet Union Technological University students with
+          unified digital instruction and interactive online protocols.</p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="pages/login.html">Login</a></li>
+          <li><a href="pages/register.html">Register</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact">
+          <li><strong>Address:</strong> Alexanderplatz 1, Berlin, Germany 10178</li>
+          <li><strong>Email:</strong> kommissariat@sutu.edu</li>
+          <li><strong>Phone:</strong> +49 30 123 456 78</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/mobile.js"></script>
+  <script>
+    // Inline auth hander to bypass browser caching of branding.js
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions) {
+        navActions.innerHTML = '<a href="pages/dashboard.html" class="btn btn-primary" style="background:var(--accent-color); border-color:var(--accent-color);">Go to Dashboard</a>';
+      }
+      const heroCta = document.querySelector('.hero-cta');
+      if (heroCta) {
+        heroCta.innerHTML = '<a href="pages/dashboard.html" class="btn btn-primary" style="background:var(--accent-color); border-color:var(--accent-color); padding: 1.2rem 3rem; font-size: 1.2rem;">Back to Dashboard</a>';
+      }
+    }
+  </script>
+  <script src="js/home.js"></script>
+</body>
+</html>
+
+

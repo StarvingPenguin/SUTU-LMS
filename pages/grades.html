@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Academy Grades & Performance Metrics">
+  <title>SUTU LMS - Academy Grades</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* ===== GRADES PAGE CUSTOM STYLES ===== */
+    :root {
+      --navy: #1a2a4a;
+      --navy-light: #243b63;
+      --gold: #f5a623;
+      --gold-light: #ffc964;
+      --grade-O: #0d6b3d;
+      --grade-Aplus: #1a9a52;
+      --grade-A: #4caf50;
+      --grade-B: #2196f3;
+      --grade-C: #f5a623;
+      --grade-F: #ef4444;
+    }
+
+    /* Loading Spinner */
+    .grades-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      gap: 1.2rem;
+    }
+    .grades-loader .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .grades-loader p {
+      color: #64748b;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Toast Notification */
+    .grades-toast {
+      position: fixed;
+      top: 90px;
+      right: 24px;
+      z-index: 9999;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      max-width: 420px;
+    }
+    .grades-toast.show { transform: translateX(0); }
+    .grades-toast.success {
+      background: linear-gradient(135deg, #0d6b3d, #1a9a52);
+      color: #fff;
+    }
+    .grades-toast.error {
+      background: linear-gradient(135deg, #b91c1c, #ef4444);
+      color: #fff;
+    }
+
+    /* Page Header */
+    .grades-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .grades-page-header h1 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .grades-page-header h1 i {
+      color: var(--gold);
+    }
+    .grades-mode-badge {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .grades-mode-badge.admin {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: var(--gold);
+    }
+    .grades-mode-badge.student {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy);
+    }
+
+    /* Selector Controls */
+    .grades-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .grades-controls label {
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 0.95rem;
+    }
+    .grades-select {
+      padding: 0.7rem 2.5rem 0.7rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 500;
+      background: #fff;
+      color: var(--navy);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a2a4a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+      background-size: 1em;
+      min-width: 220px;
+    }
+    .grades-select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(245,166,35,0.15);
+    }
+
+    /* Summary Cards */
+    .grades-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .grades-summary-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.4rem 1.2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border-left: 4px solid var(--gold);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .grades-summary-card::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 80px;
+      height: 80px;
+      background: rgba(245,166,35,0.08);
+      border-radius: 50%;
+    }
+    .grades-summary-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+    .grades-summary-card .card-value {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+    .grades-summary-card .card-label {
+      color: #64748b;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .grades-summary-card .card-icon {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: var(--gold);
+      opacity: 0.5;
+    }
+
+    /* Grades Table */
+    .grades-table-wrap {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .grades-table-wrap .table-header {
+      padding: 1.2rem 1.5rem;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .grades-table-wrap .table-header h3 {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grades-table-wrap .table-header .badge-count {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.2rem 0.7rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .grades-tbl {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .grades-tbl thead {
+      background: #f8fafc;
+    }
+    .grades-tbl th {
+      padding: 1rem 1.2rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-bottom: 2px solid #e2e8f0;
+      white-space: nowrap;
+    }
+    .grades-tbl td {
+      padding: 0.9rem 1.2rem;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.92rem;
+      color: #334155;
+      vertical-align: middle;
+    }
+    .grades-tbl tbody tr {
+      transition: background 0.2s ease;
+    }
+    .grades-tbl tbody tr:hover {
+      background: #f8fafc;
+    }
+    .grades-tbl tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Editable Input */
+    .marks-input {
+      width: 65px;
+      padding: 0.5rem 0.6rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-align: center;
+      color: var(--navy);
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+    .marks-input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(245,166,35,0.15);
+      background: #fff;
+    }
+    .marks-input.error {
+      border-color: var(--grade-F);
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.15);
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+    .marks-max {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    /* Grade Badges */
+    .grade-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      min-width: 42px;
+    }
+    .grade-O   { background: rgba(13,107,61,0.12); color: var(--grade-O); }
+    .grade-Ap  { background: rgba(26,154,82,0.12); color: var(--grade-Aplus); }
+    .grade-A   { background: rgba(76,175,80,0.12); color: var(--grade-A); }
+    .grade-B   { background: rgba(33,150,243,0.12); color: var(--grade-B); }
+    .grade-C   { background: rgba(245,166,35,0.12); color: var(--grade-C); }
+    .grade-F   { background: rgba(239,68,68,0.12); color: var(--grade-F); }
+
+    /* Save Button */
+    .btn-save-grade {
+      padding: 0.5rem 1.1rem;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: #fff;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-save-grade:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26,42,74,0.3);
+    }
+    .btn-save-grade:active {
+      transform: translateY(0);
+    }
+    .btn-save-grade.saving {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* Total + Auto Grade Display */
+    .auto-total {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 1.05rem;
+    }
+
+    /* Leaderboard */
+    .leaderboard-wrap {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .leaderboard-wrap .lb-header {
+      padding: 1.2rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .leaderboard-wrap .lb-header h3 {
+      color: var(--navy);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .rank-medal {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+    .rank-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .lb-progress-bar {
+      width: 100%;
+      max-width: 140px;
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .lb-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    /* Chart Card */
+    .chart-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .chart-card h3 {
+      font-size: 1.1rem;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .chart-card h3 i { color: var(--gold); }
+
+    /* Student Ranking Cards */
+    .ranking-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .ranking-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.4rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border-top: 4px solid var(--navy);
+      transition: transform 0.3s ease;
+    }
+    .ranking-card:hover {
+      transform: translateY(-4px);
+    }
+    .ranking-card .rc-course {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+    .ranking-card .rc-rank {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .ranking-card .rc-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.8rem;
+    }
+    .ranking-card .rc-details span {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .empty-state .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    .empty-state h3 {
+      color: var(--navy);
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    .empty-state p {
+      color: #64748b;
+      font-size: 1rem;
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .grades-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .grades-page-header h1 { font-size: 1.5rem; }
+      .grades-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grades-tbl {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .grades-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .grades-select { min-width: 100%; }
+      .ranking-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 480px) {
+      .grades-summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Guard: Must be first script on every protected page -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  
+  <!-- Standard Header -->
+  <header class="navbar">
+    <div class="logo"><a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a></div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList">
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span id="headerUserName" class="user-name" style="color: var(--bg-color); font-weight: 500;">Personnel</span>
+          <div id="headerUserAvatar" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">UN</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+      <div class="sidebar-logo">
+        <img src="../assets/university-logo.png" alt="SUTU Logo">
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html"><i data-feather="grid" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard</span></a></li>
+        <li><a href="courses.html"><i data-feather="book-open" style="margin-right: 12px; width: 20px;"></i> <span>Academy Pavilions</span></a></li>
+        <li><a href="assignment.html"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>Assignments</span></a></li>
+        <li><a href="grades.html" class="active"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Academy Grades</span></a></li>
+        <li><a href="announcements.html"><i data-feather="bell" style="margin-right: 12px; width: 20px;"></i> <span>Announcements</span></a></li>
+        <li><a href="doubts.html"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="profile.html"><i data-feather="user" style="margin-right: 12px; width: 20px;"></i> <span>Profile</span></a></li>
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='../index.html';" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content" style="display: flex; flex-direction: column;">
+      
+      <!-- Page Header (dynamically set by JS) -->
+      <div class="grades-page-header" id="gradesPageHeader">
+        <h1><i data-feather="award"></i> Academy Grades</h1>
+      </div>
+
+      <!-- Loading State -->
+      <div class="grades-loader" id="gradesLoader">
+        <div class="spinner"></div>
+        <p>Loading grades data...</p>
+      </div>
+
+      <!-- ===== ADMIN / FACULTY VIEW ===== -->
+      <div id="adminView" style="display: none;">
+        
+        <!-- Course Selector -->
+        <div class="grades-controls">
+          <label for="adminCourseSelect">Select Course:</label>
+          <select class="grades-select" id="adminCourseSelect">
+            <option value="">— Choose a course —</option>
+          </select>
+        </div>
+
+        <!-- Enrolled Students Table -->
+        <div class="grades-table-wrap" id="adminTableWrap" style="display: none;">
+          <div class="table-header">
+            <h3><i data-feather="users" style="width:18px;"></i> Enrolled Students</h3>
+            <span class="badge-count" id="adminStudentCount">0</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="grades-tbl" id="adminGradesTable">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Student Email</th>
+                  <th>Assignment <span style="color:#94a3b8; font-weight:400;">(Max 5)</span></th>
+                  <th>Internal <span style="color:#94a3b8; font-weight:400;">(Max 40)</span></th>
+                  <th>External <span style="color:#94a3b8; font-weight:400;">(Max 60)</span></th>
+                  <th>Total</th>
+                  <th>Grade</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminGradesBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Admin Loader for course data -->
+        <div class="grades-loader" id="adminCourseLoader" style="display: none;">
+          <div class="spinner"></div>
+          <p>Fetching enrolled students...</p>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-wrap" id="leaderboardWrap" style="display: none;">
+          <div class="lb-header">
+            <span style="font-size:1.4rem;">🏆</span>
+            <h3>Course Leaderboard</h3>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="grades-tbl" id="leaderboardTable">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Student Name</th>
+                  <th>Total Marks</th>
+                  <th>Grade</th>
+                  <th>Progress</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STUDENT VIEW ===== -->
+      <div id="studentView" style="display: none;">
+        
+        <!-- Semester Filter -->
+        <div class="grades-controls">
+          <label for="studentSemFilter">Filter by Semester:</label>
+          <select class="grades-select" id="studentSemFilter">
+            <option value="">All Semesters</option>
+            <option value="Sem 1">Sem 1</option>
+            <option value="Sem 2">Sem 2</option>
+            <option value="Sem 3">Sem 3</option>
+            <option value="Sem 4">Sem 4</option>
+            <option value="Sem 5">Sem 5</option>
+            <option value="Sem 6">Sem 6</option>
+            <option value="Sem 7">Sem 7</option>
+            <option value="Sem 8">Sem 8</option>
+          </select>
+        </div>
+
+        <!-- Performance Summary Cards -->
+        <div class="grades-summary-grid" id="studentSummaryCards">
+          <div class="grades-summary-card">
+            <span class="card-icon"><i data-feather="trending-up" style="width:22px;"></i></span>
+            <div class="card-value" id="summAvg">—</div>
+            <div class="card-label">Overall Average</div>
+          </div>
+          <div class="grades-summary-card">
+            <span class="card-icon"><i data-feather="star" style="width:22px;"></i></span>
+            <div class="card-value" id="summBest">—</div>
+            <div class="card-label">Best Subject</div>
+          </div>
+          <div class="grades-summary-card">
+            <span class="card-icon"><i data-feather="check-circle" style="width:22px;"></i></span>
+            <div class="card-value" id="summPassed">—</div>
+            <div class="card-label">Subjects Passed</div>
+          </div>
+          <div class="grades-summary-card">
+            <span class="card-icon"><i data-feather="award" style="width:22px;"></i></span>
+            <div class="card-value" id="summSGPA">—</div>
+            <div class="card-label">SGPA</div>
+          </div>
+        </div>
+
+        <!-- Student Grades Table -->
+        <div class="grades-table-wrap" id="studentTableWrap" style="display: none;">
+          <div class="table-header">
+            <h3><i data-feather="clipboard" style="width:18px;"></i> My Grades</h3>
+            <span class="badge-count" id="studentSubjectCount">0</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="grades-tbl" id="studentGradesTable">
+              <thead>
+                <tr>
+                  <th>Subject Name</th>
+                  <th>Course Code</th>
+                  <th>Assignment <span style="color:#94a3b8; font-weight:400;">(5)</span></th>
+                  <th>Internal <span style="color:#94a3b8; font-weight:400;">(40)</span></th>
+                  <th>External <span style="color:#94a3b8; font-weight:400;">(60)</span></th>
+                  <th>Total <span style="color:#94a3b8; font-weight:400;">(105)</span></th>
+                  <th>Grade</th>
+                </tr>
+              </thead>
+              <tbody id="studentGradesBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="studentEmptyState" style="display: none;">
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>No Grades Available Yet</h3>
+            <p>Your grades have not been entered yet. Please check back after your faculty updates them.</p>
+          </div>
+        </div>
+
+        <!-- Analytics & Rankings are moved to Course Modal overlay natively -->
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="grades-toast" id="gradesToast"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h3>SUTU LMS</h3>
+        <p class="footer-desc">Empowering Soviet Union Technological University students with unified digital instruction and interactive online protocols.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact">
+          <li><strong>Address:</strong> Alexanderplatz 1, Berlin, Germany 10178</li>
+          <li><strong>Email:</strong> kommissariat@sutu.edu</li>
+          <li><strong>Phone:</strong> +49 30 123 456 78</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Course Performance Insights Modal Overlay -->
+  <div class="modal-overlay" id="courseInsightsModal" style="display: none;">
+    <div class="modal-content" style="max-width: 800px; padding: 2rem; background: #f8fafc;">
+      <div class="modal-header">
+        <div>
+          <h3 style="font-family: var(--font-heading); color: var(--navy); font-size: 1.6rem;" id="insightsCourseName">Course Performance Insights</h3>
+          <span style="background: #e2e8f0; color: #475569; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600;" id="insightsCourseCode">SU-CODE</span>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('courseInsightsModal').style.display = 'none';"><i data-feather="x"></i></button>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+        <div class="chart-card" id="studentChartCard" style="border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.03); background: white;">
+          <h3 style="padding: 1rem; margin: 0; font-size: 1.1rem; border-bottom: 1px solid #f1f5f9;"><i data-feather="bar-chart-2" style="width:18px;"></i> Distribution Curve</h3>
+          <div style="position: relative; height: 260px; width: 100%; padding: 1rem;">
+            <canvas id="marksChart"></canvas>
+          </div>
+        </div>
+
+        <div id="studentRankingSection">
+          <div class="ranking-cards-grid" id="rankingCardsGrid">
+            <!-- Rank populated here iteratively -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boot Sequence -->
+  <script>feather.replace();</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/notifications.js?v=6"></script>
+  <script src="../js/mobile.js"></script>
+  <script src="../js/branding.js?v=8"></script>
+  <script src="../js/sidebar-toggle.js"></script>
+  <script src="../js/grades.js"></script>
+</body>
+</html>

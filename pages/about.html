@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Soviet Union Technological University, Berlin &mdash; SUTU LMS">
+  <title>SUTU LMS - About the University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    /* â”€â”€ Page Shell â”€â”€ */
+    .about-page { background: #f8fafc; min-height: 100vh; }
+
+    /* â”€â”€ Hero Banner â”€â”€ */
+    .about-hero {
+      background: linear-gradient(135deg, #1e1e1e 0%, #303030 60%, #1a1a1a 100%);
+      color: white;
+      padding: 5rem 8%;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(255,0,0,0.08); /* Red accent for Soviet theme */
+    }
+    .about-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 5%;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,0,0,0.05);
+    }
+    .about-hero-inner { max-width: 760px; position: relative; z-index: 1; }
+    .about-hero .university-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #ff4d4d;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.2rem;
+    }
+    .about-hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .about-hero h1 span { color: #ff3333; }
+    .about-hero p {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      line-height: 1.8;
+      max-width: 620px;
+    }
+    .hero-badges {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero-badge {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #e2e8f0;
+    }
+    .hero-badge i { color: #ff3333; width: 16px; }
+
+    /* â”€â”€ Stats Bar â”€â”€ */
+    .stats-bar {
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 3px solid #f1f5f9;
+    }
+    @media (max-width: 768px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+    .stat-item {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border-right: 1px solid #f1f5f9;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-number span { color: #ff3333; }
+    .stat-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+
+    /* â”€â”€ Content Sections â”€â”€ */
+    .about-body { padding: 4rem 8%; }
+    .section-tag {
+      display: inline-block;
+      background: #ffebeb;
+      color: #b30000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      color: #1a1a1a;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .section-lead {
+      font-size: 1.05rem;
+      color: #64748b;
+      line-height: 1.8;
+      max-width: 720px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* â”€â”€ About Grid (History + Image) â”€â”€ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-bottom: 4rem;
+    }
+    @media (max-width: 992px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-text p {
+      color: #475569;
+      line-height: 1.9;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+    .highlight-box {
+      background: linear-gradient(135deg, #1a1a1a, #303030);
+      color: white;
+      border-radius: 14px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+    }
+    .highlight-box h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      color: #ff3333;
+      margin-bottom: 0.8rem;
+    }
+    .highlight-box p { color: #cbd5e1; line-height: 1.7; margin: 0; font-size: 0.95rem; }
+    .info-card {
+      background: white;
+      border-radius: 14px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border-top: 4px solid #ff3333;
+    }
+    .info-card h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #1a1a1a;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.75rem 0;
+      border-bottom: 1px dashed #f1f5f9;
+      gap: 1rem;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #64748b; font-size: 0.9rem; font-weight: 500; min-width: 110px; }
+    .info-value { color: #1e293b; font-size: 0.9rem; font-weight: 600; text-align: right; }
+
+    /* â”€â”€ Vision / Mission / Values â”€â”€ */
+    .vmv-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    @media (max-width: 768px) { .vmv-grid { grid-template-columns: 1fr; } }
+    .vmv-card {
+      background: white;
+      border-radius: 14px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .vmv-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+    .vmv-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: #1a1a1a;
+      display: flex; align-items: center; justify-content: center;
+      color: #ff3333;
+      margin-bottom: 1.2rem;
+    }
+    .vmv-card h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #1a1a1a;
+      font-size: 1.15rem;
+      margin-bottom: 0.8rem;
+    }
+    .vmv-card p { color: #64748b; line-height: 1.7; font-size: 0.93rem; }
+
+    /* â”€â”€ Departments â”€â”€ */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 4rem;
+    }
+    @media (max-width: 992px) { .dept-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 576px) { .dept-grid { grid-template-columns: 1fr; } }
+    .dept-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-left: 4px solid #1a1a1a;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .dept-card:hover { border-color: #ff3333; transform: translateX(4px); }
+    .dept-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      opacity: 0.15;
+      min-width: 36px;
+    }
+    .dept-info h4 { font-size: 0.95rem; color: #1a1a1a; font-weight: 600; margin-bottom: 0.2rem; }
+    .dept-info p { font-size: 0.8rem; color: #64748b; margin: 0; }
+
+    /* â”€â”€ Achievements â”€â”€ */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    @media (max-width: 768px) { .achievements-grid { grid-template-columns: 1fr; } }
+    .achievement-item {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .ach-icon {
+      background: #ffebeb;
+      color: #b30000;
+      padding: 0.7rem;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .achievement-item h4 { font-size: 0.95rem; color: #1a1a1a; font-weight: 600; margin-bottom: 0.3rem; }
+    .achievement-item p { font-size: 0.85rem; color: #64748b; line-height: 1.6; margin: 0; }
+
+    /* â”€â”€ CTA Banner â”€â”€ */
+    .cta-banner {
+      background: linear-gradient(135deg, #1a1a1a 0%, #303030 100%);
+      border-radius: 16px;
+      padding: 3rem 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .cta-banner h2 { font-family: 'Poppins', sans-serif; font-size: 1.8rem; color: white; margin-bottom: 0.5rem; }
+    .cta-banner p { color: #94a3b8; font-size: 1rem; max-width: 480px; }
+    .cta-actions { display: flex; gap: 1rem; flex-shrink: 0; flex-wrap: wrap; }
+  </style>
+</head>
+<body class="about-page">
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo"><a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a></div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="about.html" style="color: var(--accent-color);">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline">Login</a>
+      <a href="register.html" class="btn btn-primary">Register</a>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="about-hero">
+    <div class="about-hero-inner">
+      <span class="university-tag">Est. 1945 &middot; East Berlin, Germany</span>
+      <h1><span>Soviet Union</span><br><span>Technological University</span></h1>
+      <p>A unique institution dedicated to the intersection of history, technology, and social engineering in the heart of Berlin.</p>
+      <div class="hero-badges">
+        <div class="hero-badge"><i data-feather="award"></i> Union Certified</div>
+        <div class="hero-badge"><i data-feather="users"></i> 50,000+ Personnel</div>
+        <div class="hero-badge"><i data-feather="book-open"></i> 15 Specialized Pavilions</div>
+        <div class="hero-badge"><i data-feather="map-pin"></i> Alexanderplatz, Berlin</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-number">80<span>+</span></div>
+      <div class="stat-label">Years of History</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">15<span>+</span></div>
+      <div class="stat-label">Pavilions of Learning</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">50K<span>+</span></div>
+      <div class="stat-label">Worldwide Alumni</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">12<span>+</span></div>
+      <div class="stat-label">Kommissariats</div>
+    </div>
+  </div>
+
+  <!-- Main Body -->
+  <div class="about-body">
+
+    <!-- About / History Section -->
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-tag">Our History</span>
+        <h2 class="section-title">A Legacy of Digital Sovereignty</h2>
+        <p>The Soviet Union Technological University (SUTU) was established in <strong>1945</strong> as a central hub for technical innovation and industrial exchange in Berlin. Located at Alexanderplatz, the university has stood as a monument to progressive engineering and technological sovereignty for nearly a century.</p>
+        <p>Named to reflect the grand alliance of technical minds, the university embodies the philosophy that technical mastery is the ultimate tool for unity and industrial advancement. Our campus, featuring iconic industrial-era architecture blended with cutting-edge technical labs, provides an environment like no other.</p>
+        <p>From its foundation, SUTU has grown into the world's most enigmatic technical institution, with a campus spread across <strong>1000+ acres</strong> in the heart of Berlin, housing the continent's most advanced data centers and technical hubs.</p>
+
+        <div class="highlight-box">
+          <h4>🌟 University's Motto</h4>
+          <p><em>"Unity, Victory, Education"</em> &mdash; the guiding principles that drive our students to become the architects of a collective digital future.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="info-card">
+          <h3>🏛️ SUTU At a Glance</h3>
+          <div class="info-row">
+            <span class="info-label">Founded</span>
+            <span class="info-value">1945</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Type</span>
+            <span class="info-value">International Technical Academy</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Location</span>
+            <span class="info-value">Alexanderplatz 1,<br>Berlin, Germany 10178</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Campus</span>
+            <span class="info-value">1000+ Acres</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Specialist Pavilions</span>
+            <span class="info-value">15+</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-value">Union Recognized</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Website</span>
+            <span class="info-value"><a href="#" style="color: #ff3333;">www.sutu.edu</a></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Email</span>
+            <span class="info-value">kommissariat@sutu.edu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vision / Mission / Values -->
+    <span class="section-tag">Our Foundation</span>
+    <h2 class="section-title">Vision, Mission & Values</h2>
+    <p class="section-lead">At SUTU, our mission is to consolidate technical knowledge and empower a new generation of leaders for the technical union.</p>
+
+    <div class="vmv-grid">
+      <div class="vmv-card">
+        <div class="vmv-icon"><i data-feather="eye" style="width:24px;height:24px;"></i></div>
+        <h3>Our Vision</h3>
+        <p>To be the world's leading center for unified technical education, where innovation serves the collective progress of society.</p>
+      </div>
+      <div class="vmv-card">
+        <div class="vmv-icon"><i data-feather="target" style="width:24px;height:24px;"></i></div>
+        <h3>Our Mission</h3>
+        <p>To provide high-discipline technical training and foster an environment of radical innovation and social responsibility.</p>
+      </div>
+      <div class="vmv-card">
+        <div class="vmv-icon"><i data-feather="heart" style="width:24px;height:24px;"></i></div>
+        <h3>Our Values</h3>
+        <p>Discipline, Collective Progress, Technical Sovereignty, and Unwavering Commitment to the Digital Future.</p>
+      </div>
+    </div>
+
+    <!-- Departments -->
+    <span class="section-tag">Pavilions of Learning</span>
+    <h2 class="section-title">Kommissariats & Departments</h2>
+    <p class="section-lead">SUTU offers specialized training in fields critical to modern infrastructure and industrial governance.</p>
+
+    <div class="dept-grid">
+      <div class="dept-card">
+        <div class="dept-number">01</div>
+        <div class="dept-info">
+          <h4>Information Control & Data Science</h4>
+          <p>Academy Grade &middot; Mastery &middot; Ph.D</p>
+        </div>
+      </div>
+      <div class="dept-card">
+        <div class="dept-number">02</div>
+        <div class="dept-info">
+          <h4>Structural Engineering (Metropolis)</h4>
+          <p>Academy Grade &middot; Mastery &middot; Ph.D</p>
+        </div>
+      </div>
+      <div class="dept-card">
+        <div class="dept-number">03</div>
+        <div class="dept-info">
+          <h4>Electronic Sovereignty</h4>
+          <p>Academy Grade &middot; Mastery &middot; Ph.D</p>
+        </div>
+      </div>
+      <div class="dept-card">
+        <div class="dept-number">04</div>
+        <div class="dept-info">
+          <h4>Applied Cybernetics</h4>
+          <p>Academy Grade &middot; Mastery &middot; Ph.D</p>
+        </div>
+      </div>
+      <div class="dept-card">
+        <div class="dept-number">05</div>
+        <div class="dept-info">
+          <h4>Political Engineering</h4>
+          <p>Academy Grade &middot; Mastery &middot; Ph.D</p>
+        </div>
+      </div>
+      <div class="dept-card">
+        <div class="dept-number">06</div>
+        <div class="dept-info">
+          <h4>Industrial Automation (Berlin Core)</h4>
+          <p>Academy Grade &middot; Mastery &middot; Ph.D</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Banner -->
+    <div class="cta-banner" id="auth-cta-banner">
+      <div id="cta-text-content">
+        <h2>Ready to Join the Union?</h2>
+        <p>Access your training protocols, assignments, and grades &mdash; all in one unified portal. Designed for SUTU personnel.</p>
+      </div>
+      <div class="cta-actions" id="cta-button-group">
+        <a href="register.html" class="btn btn-primary" style="padding: 0.85rem 2rem;">Apply Now</a>
+        <a href="login.html" class="btn btn-outline" style="padding: 0.85rem 2rem; border-color: rgba(255,255,255,0.3); color: white;">Personnel Login</a>
+      </div>
+    </div>
+
+  </div><!-- /about-body -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      
+      <div class="footer-col" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="logo">
+          <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+            <img src="../assets/university-logo.png" alt="University Logo" style="height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 1.5rem; font-weight: 700; color: var(--bg-color);">SUTU <span style="color: var(--accent-color);">LMS</span></span>
+            </div>
+          </a>
+        </div>
+        <p class="footer-desc">Empowering Soviet Union Technological University students with unified digital education and interactive training protocols.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="about.html">About SUTU</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register.html">Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact">
+          <li><strong>Address:</strong> Alexanderplatz 1, Berlin, Germany 10178</li>
+          <li><strong>Email:</strong> kommissariat@sutu.edu</li>
+          <li><strong>Phone:</strong> +49 30 123 456 78</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/mobile.js"></script>
+  <script src="../js/branding.js?v=8"></script>
+  <script>
+    feather.replace();
+    
+    // Auth State UI Sync
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      const ctaTitle = document.querySelector('#cta-text-content h2');
+      const ctaLead = document.querySelector('#cta-text-content p');
+      const ctaButtons = document.getElementById('cta-button-group');
+      
+      if (ctaTitle) ctaTitle.textContent = "Welcome to the SUTU Pavilion";
+      if (ctaLead) ctaLead.textContent = "Your training protocols and specialized modules are active. Continue your progress at the command center.";
+      if (ctaButtons) {
+        ctaButtons.innerHTML = '<a href="dashboard.html" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem; background: var(--accent-color); border-color: var(--accent-color);">Back to Command Center</a>';
+      }
+    }
+  </script>
+</body>
+

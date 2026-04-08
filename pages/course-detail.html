@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Comprehensive Training Protocols">
+  <title>SUTU LMS - Protocol Details</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body style="background-color: #f8fafc;">
+  <!-- Public Page (Course Description is public) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html" style="color: var(--accent-color)">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+        <span style="color: var(--bg-color); font-weight: 500;" class="user-name">Personnel</span>
+        <div style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;" class="user-avatar">UN</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Deep Navy Hero Course Header Panel -->
+  <section class="course-header" style="background: radial-gradient(circle at top right, #303030, #1a1a1a); padding: 4rem 5%; color: var(--white);">
+    <div class="course-header-content" style="max-width: 1200px; margin: 0 auto; display: flex; gap: 3rem; align-items: center;">
+      
+      <div class="course-header-text" style="flex: 2;">
+        <span class="badge-nptel" style="margin-bottom: 1.5rem; background: rgba(255,51,51,0.2); color: #fff; border: 1px solid #ff3333; font-weight: 600;">Information Control & Data Science</span>
+        <h1 style="color: #fff; font-size: 3.5rem; margin-bottom: 1.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">Data Structures and Algorithms</h1>
+        <p style="font-size: 1.25rem; color: #fff; line-height: 1.8; margin-bottom: 2rem; font-weight: 400; text-shadow: 0 1px 5px rgba(0,0,0,0.2);">Master the fundamental data structures and classic algorithms essential for maintaining unified digital systems and acing technological evaluations.</p>
+        
+        <div class="course-stats-bar" style="display: flex; gap: 2rem; opacity: 0.9;">
+          <div class="stat-item" style="display: flex; align-items: center; gap: 8px;">
+            <i data-feather="users" style="width: 20px;"></i> 145 Personnel
+          </div>
+          <div class="stat-item" style="display: flex; align-items: center; gap: 8px;">
+            <i data-feather="video" style="width: 20px;"></i> 24 Protocols
+          </div>
+          <div class="stat-item" style="display: flex; align-items: center; gap: 8px;">
+            <i data-feather="award" style="width: 20px;"></i> Protocol Certificate
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sticky Action Card -->
+      <div class="course-actions premium-card" style="flex: 1; padding: 2.5rem; background: var(--white); border-radius: var(--radius-lg); text-align: center; color: var(--text-color);">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.8rem; margin-bottom: 0.5rem;">Access: <span style="color: #de1c1c;">MANDATORY</span></h3>
+        <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem;">Authorized for all SUTU Personnel</p>
+        <div id="courseActionButtons" style="display: flex; flex-direction: column; gap: 1rem;">
+          <a href="#" id="enrollNowBtn" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: var(--radius-md); background: #1a1a1a;">Initiate Training</a>
+        </div>
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">Protocol Fee: Free for Academy Members</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Dynamic JavaScript Tab Navigation -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-target="overview">Overview</button>
+    <button class="tab-btn" data-target="syllabus">Syllabus</button>
+    <button class="tab-btn" data-target="assignments">Assignments</button>
+    <button class="tab-btn" data-target="discussions">Discussions</button>
+  </nav>
+
+  <!-- Content Architecture Split: Left Side Panel vs Right Side Meta -->
+  <main class="course-body">
+    
+    <!-- Left Side Primary Views -->
+    <div class="content-left">
+      
+      <!-- OVERVIEW TAB -->
+      <div id="overview" class="tab-content active">
+        <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 1rem;">Protocol Overview</h2>
+        <div style="color: #475569; line-height: 1.7; font-size: 1.05rem;">
+          <p style="margin-bottom: 1rem;">Data Structures and Algorithms (DSA) form the true foundation of digital systems and information control. This comprehensive module is specifically architected for SUTU Academy personnel aiming to develop robust problem-solving skills and systematically write highly optimized code routines.</p>
+          <p style="margin-bottom: 1.5rem;">Throughout this intensive training, you will deeply explore how varied data flows can be optimally organized in physical memory, and learn the classic mathematical algorithms deployed to efficiently process that data. Weekly hands-on collaborative coding sessions will ensure you can definitively apply theoretical concepts into functioning real-world scenarios.</p>
+          
+          <h3 style="color: var(--primary-color); margin-bottom: 1rem; font-family: var(--font-heading);">Key Objectives:</h3>
+          <ul style="list-style-position: inside; margin-bottom: 2rem;">
+            <li style="margin-bottom: 0.5rem;"><i data-feather="check-square" style="width: 16px; color: #ff3333; margin-right: 0.5rem;"></i> Analyze time & space complexity maps using Asymptotic Big-O notation.</li>
+            <li style="margin-bottom: 0.5rem;"><i data-feather="check-square" style="width: 16px; color: #ff3333; margin-right: 0.5rem;"></i> Implement rigid linear data models capturing Stacks, Queues, and Linked Lists.</li>
+            <li style="margin-bottom: 0.5rem;"><i data-feather="check-square" style="width: 16px; color: #ff3333; margin-right: 0.5rem;"></i> Navigate hierarchical node mapping rendering Trees and Heaps.</li>
+            <li style="margin-bottom: 0.5rem;"><i data-feather="check-square" style="width: 16px; color: #ff3333; margin-right: 0.5rem;"></i> Execute comprehensive sorting and efficient searching methodologies safely.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SYLLABUS TAB with Dynamic Accordion Component -->
+      <div id="syllabus" class="tab-content">
+        <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 1.5rem;">Protocol Detailed Syllabus</h2>
+        
+        <div class="accordion-item active">
+          <div class="accordion-header">
+            <span>Unit 1: Introduction & Asymptotic Analysis</span>
+            <i data-feather="chevron-down"></i>
+          </div>
+          <div class="accordion-content">
+            <ul class="topic-list">
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 1.1 Structural Foundations & Defined Arrays</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 1.2 Measuring Execution Efficiencies </li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 1.3 Translating Big-O and Omega Theories</li>
+              <li><i data-feather="lock" style="color: #94a3b8; width: 18px;"></i> Quiz: Foundational Metrics (Initiate to Unlock)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span>Unit 2: Complex Linear Models</span>
+            <i data-feather="chevron-down"></i>
+          </div>
+          <div class="accordion-content">
+            <ul class="topic-list">
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 2.1 Implementing Singly & Doubly Linked Lists</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 2.2 Reversing Nodes Functionality</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 2.3 Operating Push/Pop LIFO Stack Procedures</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 2.4 Implementing Standard circular queue systems</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span>Unit 3: Hierarchical Node Trees</span>
+            <i data-feather="chevron-down"></i>
+          </div>
+          <div class="accordion-content">
+            <ul class="topic-list">
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 3.1 Mapping Binary Tree Structures Constraints</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 3.2 Operating Search Vectors in BST nodes</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 3.3 Utilizing Max/Min Heap Extrusion principles</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span>Unit 4: Navigating Undirected Graphs</span>
+            <i data-feather="chevron-down"></i>
+          </div>
+          <div class="accordion-content">
+            <ul class="topic-list">
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 4.1 Plotting Vectors in Matrix Models</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 4.2 Traversing Breadth vs Depth Models (BFS/DFS)</li>
+              <li><i data-feather="play-circle" style="color: var(--primary-color); width: 18px;"></i> 4.3 Formulating Dijkstra's Path Mapping Engine</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENTS TAB -->
+      <div id="assignments" class="tab-content">
+        <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 1.5rem;">Interactive Assignments</h2>
+        <div style="background-color: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 3rem 2rem; text-align: center;">
+          <i data-feather="lock" style="width: 48px; height: 48px; color: #94a3b8; margin-bottom: 1rem;"></i>
+          <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; font-family: var(--font-heading);">Initiate to view Protocol Assignments</h3>
+          <p style="color: #64748b;">You must be actively initiated in this protocol to securely access and submit your algorithmic assignments directly.</p>
+        </div>
+      </div>
+
+      <!-- DISCUSSIONS TAB -->
+      <div id="discussions" class="tab-content">
+        <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 1.5rem;">Pavilion Discussions</h2>
+        <div style="background-color: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 3rem 2rem; text-align: center;">
+          <i data-feather="message-circle" style="width: 48px; height: 48px; color: #94a3b8; margin-bottom: 1rem;"></i>
+          <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; font-family: var(--font-heading);">Join the Academy Community</h3>
+          <p style="color: #64748b;">Secure your initiation to dive into deep technical discussions ranging across all cohorts alongside Kommissars.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Side Navigational Display Panels -->
+    <div class="content-right">
+      
+      <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.25rem; margin-bottom: 1rem;">Academy Kommissar</h3>
+      <!-- Profile Display block -->
+      <div class="faculty-card">
+        <!-- Pravatar creates a highly realistic placeholder avatar -->
+        <div class="faculty-photo" style="background-image: url('https://i.pravatar.cc/300?img=11');"></div>
+        <h3 style="font-family:var(--font-heading);">Dr. Ramesh Kumar</h3>
+        <p>Academy Kommissar, Information Pavilion.</p>
+        
+        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+          <a href="#" style="color: #64748b; transition: color 0.3s ease;"><i data-feather="mail" style="width: 20px;"></i></a>
+          <a href="#" style="color: #64748b; transition: color 0.3s ease;"><i data-feather="linkedin" style="width: 20px;"></i></a>
+          <a href="#" style="color: #64748b; transition: color 0.3s ease;"><i data-feather="globe" style="width: 20px;"></i></a>
+        </div>
+      </div>
+      
+      <!-- Quick Feature Verification Block -->
+      <div style="background-color: white; border-radius: 12px; padding: 1.5rem; border: 1px solid #e2e8f0; margin-top: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02)">
+        <h4 style="color: var(--primary-color); margin-bottom: 1.2rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem; font-family: var(--font-heading);">Protocol Feature Inclusions</h4>
+        <ul style="list-style: none; color: #475569; font-size: 0.95rem;">
+          <li style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;"><i data-feather="monitor" style="width: 18px; color: #ff3333;"></i> 100% Digital Delivery</li>
+          <li style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;"><i data-feather="award" style="width: 18px; color: #ff3333;"></i> Protocol Certificate Node</li>
+          <li style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;"><i data-feather="video" style="width: 18px; color: #ff3333;"></i> Hi-Res Instruction Protocols</li>
+          <li style="display: flex; align-items: center; gap: 0.8rem;"><i data-feather="help-circle" style="width: 18px; color: #ff3333;"></i> Direct Kommissariat Links</li>
+        </ul>
+      </div>
+      
+    </div>
+
+  </main>
+
+  <!-- Generic Empty Footer Mapping -->
+  <footer class="footer" style="padding: 1rem 5%;">
+    <div class="footer-bottom" style="border-top: none; padding: 1rem 0;">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University, Berlin. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Init Libraries & Bindings -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/mobile.js"></script>
+<script src="../js/branding.js?v=8"></script>
+<script src="../js/payment.js"></script>
+<script src="../js/course-detail.js?v=11"></script>
+<script>feather.replace();</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

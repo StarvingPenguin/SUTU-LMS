@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Soviet Union Technological University — SUTU LMS Support">
+  <title>SUTU LMS - Contact Support</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .contact-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 1rem; }
+    @media (max-width: 992px) { .contact-layout { grid-template-columns: 1fr; } }
+    .contact-form-card { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border-top: 5px solid var(--accent-color); }
+    .contact-info-card { background: var(--primary-color); color: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .contact-info-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 2rem; }
+    .contact-info-item:last-child { margin-bottom: 0; }
+    .contact-icon-wrapper { background: rgba(255,255,255,0.1); padding: 0.75rem; border-radius: 8px; color: var(--accent-color); }
+    .info-text h4 { font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 0.25rem; color: var(--accent-color); }
+    .info-text p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155; }
+    .form-control { width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Inter', sans-serif; transition: border-color 0.2s; background: #f8fafc; }
+    .form-control:focus { border-color: var(--primary-color); outline: none; background: white; }
+    textarea.form-control { resize: vertical; min-height: 120px; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo"><a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a></div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" style="color: var(--accent-color);">Support</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline">Login</a>
+      <a href="register.html" class="btn btn-primary">Register</a>
+    </div>
+  </header>
+
+  <div class="page-content" style="padding: 2rem 5%; background-color: #f8fafc; min-height: calc(100vh - 80px);">
+      <h1 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary-color); margin-bottom: 0.5rem;">Support & Help</h1>
+      <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 2rem;">Experiencing issues? Our university IT kommissariat is here to help you.</p>
+
+      <div class="contact-layout">
+        <!-- Form Side -->
+        <div class="contact-form-card">
+          <form id="contactSupportForm" onsubmit="event.preventDefault(); alert('Your message has been safely sent to the IT Department!'); this.reset();">
+            <div class="form-group">
+              <label for="contactName">Full Name</label>
+              <input type="text" id="contactName" class="form-control" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">University Email</label>
+              <input type="email" id="contactEmail" class="form-control" placeholder="e.g. personnel@sutu.edu" required>
+            </div>
+            <div class="form-group">
+              <label for="contactSubject">Subject</label>
+              <select id="contactSubject" class="form-control" required>
+                <option value="" disabled selected>Select an issue category...</option>
+                <option value="technical">Technical Issue</option>
+                <option value="course">Course Help</option>
+                <option value="account">Account Problem</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contactMessage">Message</label>
+              <textarea id="contactMessage" class="form-control" placeholder="Please describe your issue in detail..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+              <i data-feather="send" style="width: 18px;"></i> Send Message
+            </button>
+          </form>
+        </div>
+
+        <!-- Info Side -->
+        <div class="contact-info-card">
+          <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 2rem; color: white;">Contact Information</h3>
+          
+          <div class="contact-info-item">
+            <div class="contact-icon-wrapper"><i data-feather="mail"></i></div>
+            <div class="info-text">
+              <h4>Email Support</h4>
+              <p>kommissariat@sutu.edu</p>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-icon-wrapper"><i data-feather="phone-call"></i></div>
+            <div class="info-text">
+              <h4>Phone Helpdesk</h4>
+              <p>+49 30 123 456 78</p>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-icon-wrapper"><i data-feather="map-pin"></i></div>
+            <div class="info-text">
+              <h4>Main Campus Address</h4>
+              <p>Alexanderplatz 1, Berlin,<br>Germany 10178</p>
+            </div>
+          </div>
+
+          <div class="contact-info-item" style="margin-top: 3rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem;">
+            <div class="contact-icon-wrapper"><i data-feather="clock"></i></div>
+            <div class="info-text">
+              <h4>University Helpdesk Hours</h4>
+              <p>Monday - Saturday<br>9:00 AM to 5:00 PM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="logo">
+          <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+            <img src="../assets/university-logo.png" alt="University Logo" style="height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 1.5rem; font-weight: 700; color: var(--bg-color);">SUTU <span style="color: var(--accent-color);">LMS</span></span>
+            </div>
+          </a>
+        </div>
+        <p class="footer-desc">Empowering Soviet Union Technological University students with unified digital instruction and interactive online protocols.</p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact">
+          <li><strong>Address:</strong> Alexanderplatz 1, Berlin, Germany 10178</li>
+          <li><strong>Email:</strong> kommissariat@sutu.edu</li>
+          <li><strong>Phone:</strong> +49 30 123 456 78</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/mobile.js"></script>
+  <script src="../js/branding.js?v=8"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      feather.replace();
+      const userName = localStorage.getItem("userName") || "";
+      const userEmail = localStorage.getItem("userEmail") || "";
+      if(userName) {
+        const nameInp = document.getElementById("contactName");
+        if (nameInp) nameInp.value = userName;
+      }
+      if(userEmail) {
+        const emailInp = document.getElementById("contactEmail");
+        if (emailInp) emailInp.value = userEmail;
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Training Protocol Assignment and Submission">
+  <title>SUTU LMS - Assignments</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <!-- Auth Guard: Must be first script on every protected page -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  
+  <!-- Standard Logged-in Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList">
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span id="headerUserName" class="user-name" style="color: var(--bg-color); font-weight: 500;">John Doe</span>
+          <div id="headerUserAvatar" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">JD</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Container framework maintaining native LMS feel -->
+  <div class="dashboard-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+      <div class="sidebar-logo">
+        <img src="../assets/university-logo.png" alt="University Logo">
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html"><i data-feather="grid" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard</span></a></li>
+        <li><a href="courses.html"><i data-feather="book-open" style="margin-right: 12px; width: 20px;"></i> <span>My Pavilions</span></a></li>
+        <li><a href="assignment.html" class="active"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>Assignments</span></a></li>
+        <li><a href="grades.html"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Grades</span></a></li>
+        <li><a href="announcements.html"><i data-feather="bell" style="margin-right: 12px; width: 20px;"></i> <span>Announcements</span></a></li>
+        <li><a href="doubts.html"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="profile.html"><i data-feather="user" style="margin-right: 12px; width: 20px;"></i> <span>Profile</span></a></li>
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='../index.html';" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Dynamic Main Workflow Window -->
+    <main class="dashboard-content" style="display: flex; flex-direction: column;">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color); margin: 0;">My Assignments</h1>
+        <button id="adminNewAssignmentBtn" class="btn btn-primary" style="display: none; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem;">
+          <i data-feather="plus-circle" style="width: 18px;"></i> New Assignment
+        </button>
+      </div>
+      
+      <!-- Structural dual-pane logic mapping list views to single-view actions natively -->
+      <div class="assignments-layout">
+        
+        <!-- Left Scrolling Interaction Panel -->
+        <div class="assignments-list-panel">
+          
+          <!-- Instance 1: Standard Active Pending Assignment -->
+          <!-- Utilizing Custom Data Attributes specifically for seamless Javascript payload extraction -->
+          <div class="assignment-card" data-id="assign1" data-status="pending">
+            <div class="assignment-header">
+              <div class="assignment-title">Implement Binary Search Tree</div>
+              <span class="status-badge status-pending" id="badge-assign1">Pending</span>
+            </div>
+            <span class="assignment-subject">Data Structures and Algorithms (CS301)</span>
+            <div class="assignment-meta">
+              <span class="due-date" id="date-assign1"><i data-feather="calendar" style="width: 14px; margin-bottom:-2px;"></i> Due: Tomorrow, 11:59 PM</span>
+            </div>
+          </div>
+
+          <!-- Instance 2: Overdue Evaluator Logic Flag -->
+          <div class="assignment-card overdue" data-id="assign2" data-status="overdue">
+            <div class="assignment-header">
+              <div class="assignment-title">Database Normalization Case Study</div>
+              <span class="status-badge status-overdue" id="badge-assign2">Overdue</span>
+            </div>
+            <span class="assignment-subject">Database Management Systems (CS302)</span>
+            <div class="assignment-meta">
+              <!-- Due date is colored distinctively red directly through dynamic CSS selector logic -->
+              <span class="due-date overdue-text" id="date-assign2"><i data-feather="alert-circle" style="width: 14px; margin-bottom:-2px;"></i> Due: 2 days ago</span>
+            </div>
+          </div>
+
+          <!-- Instance 3: Finalized State Log -->
+          <div class="assignment-card submitted" data-id="assign3" data-status="submitted">
+            <div class="assignment-header">
+              <div class="assignment-title">Virtual Memory Allocation Algorithm</div>
+              <span class="status-badge status-submitted" id="badge-assign3">Submitted</span>
+            </div>
+            <span class="assignment-subject">Operating Systems (CS305)</span>
+            <div class="assignment-meta">
+              <span class="due-date" id="date-assign3"><i data-feather="check-circle" style="width: 14px; margin-bottom:-2px; color: #10b981;"></i> Submitted on: Oct 12, 10:30 AM</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Interaction Display Panel -->
+        <div class="assignment-detail-panel">
+          
+          <!-- Landing Default Empty Node State -->
+          <div id="detailEmptyState" class="detail-empty-state">
+            <i data-feather="inbox" style="width: 64px; height: 64px; color: #cbd5e1; margin-bottom: 1rem;"></i>
+            <h3>Select an assignment</h3>
+            <p>Click on an assignment from the queue to view secure instructions and submit files.</p>
+          </div>
+
+          <!-- Rendered Target Active Content Box -->
+          <div id="detailContent" class="detail-content">
+            <!-- Content dynamically overwrites here structurally -->
+            <h2 id="viewTitle" class="detail-title">Title Placeholder</h2>
+            <div class="detail-meta">
+              <span id="viewSubject"><i data-feather="book" style="width: 16px;"></i> Subject Placeholder</span>
+              <span id="viewDueDate"><i data-feather="calendar" style="width: 16px;"></i> Due Date Placeholder</span>
+            </div>
+
+            <!-- Raw Instruction HTML -->
+            <div class="detail-instructions">
+              <strong style="color: var(--primary-color); display: block; margin-bottom: 0.5rem; font-family: var(--font-heading); font-size: 1.1rem;">Instructions:</strong>
+              <p id="viewDescription">Placeholder instructions</p>
+            </div>
+
+            <!-- Active Editable Submission Mechanics Form -->
+            <div id="submissionArea" class="submission-area">
+              <h4 style="font-family: var(--font-heading);">Submit Assessment</h4>
+              <form id="submissionForm">
+                <div class="file-upload-wrapper">
+                  <label class="file-upload-btn" for="fileUpload">
+                    <i data-feather="paperclip"></i> Attach File (PDF, DOCX)
+                  </label>
+                  <!-- Hidden native input -->
+                  <input type="file" id="fileUpload" class="file-upload-input" accept=".pdf,.doc,.docx">
+                  <div id="fileNameDisplay" class="file-name-display" style="display: none;"></div>
+                </div>
+                
+                <label for="comments" style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: #475569;">Additional Comments (Optional):</label>
+                <textarea id="comments" class="comments-area" placeholder="Add any necessary notes for your faculty grading this..."></textarea>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
+                  <i data-feather="send" style="width: 18px;"></i> Submit Assignment
+                </button>
+              </form>
+            </div>
+
+            <!-- Post-Process Interaction Validated Component -->
+            <div id="submissionSuccess" class="submission-success">
+              <i data-feather="check-circle"></i>
+              <h3 style="font-family: var(--font-heading);">Successfully Submitted!</h3>
+              <p>Your assignment has been securely uploaded and flagged for grading routines.</p>
+              <p style="font-size: 0.85rem; margin-top: 1rem; color: #047857; font-weight: 600;">Encrypted Timestamp: <span id="timestamp"></span></p>
+            </div>
+            
+            <!-- Persistent Evaluated Read-Only State Log -->
+            <div id="alreadySubmittedView" class="submission-success" style="background-color: #f8fafc; border-color: #e2e8f0; color: #475569; display: none;">
+              <i data-feather="check-square" style="color: #10b981;"></i>
+              <h3 style="color: var(--primary-color);">You have already safely submitted this assignment.</h3>
+              <p>This payload is locked and currently pending evaluation by the faculty engine.</p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- SVGs + Core Interaction Hooking -->
+  <script>feather.replace();</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/notifications.js?v=6"></script>
+<script src="../js/mobile.js"></script>
+<script src="../js/branding.js?v=8"></script>
+<script src="../js/sidebar-toggle.js"></script>
+<script src="../js/assignment.js?v=5"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

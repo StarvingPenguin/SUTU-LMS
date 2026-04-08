@@ -1,0 +1,32 @@
+[
+  {
+    "id": 2,
+    "course_name": "Basic Calculus",
+    "description": "Learn about basics"
+  },
+  {
+    "id": 3,
+    "course_name": "Machine Learning & AI",
+    "description": "Comprehensive introduction to machine learning, data mining, and statistical pattern recognition."
+  },
+  {
+    "id": 4,
+    "course_name": "Microprocessors & Interfacing",
+    "description": "Study of microprocessor architecture, assembly language programming, and interfacing techniques."
+  },
+  {
+    "id": 5,
+    "course_name": "Software Engineering & Agile",
+    "description": "Modern software development life cycles, requirement analysis, and agile methodologies."
+  },
+  {
+    "id": 6,
+    "course_name": "Deep Learning Specialization",
+    "description": "Master the foundations of Deep Learning, understand how to build neural networks, and learn how to lead successful machine learning projects."
+  },
+  {
+    "id": 7,
+    "course_name": "Design of Machine Elements",
+    "description": "Fundamental principles of mechanical design, stress analysis, and failure theories for common machine elements like shafts, gears, and bearings."
+  }
+]

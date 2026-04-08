@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Detailed Training Protocols and Academy Resources">
+  <title>SUTU LMS - Training Protocol Detail</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons for vector icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <!-- Auth Guard: Must be first script on every protected page -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+
+  <!-- Navigation Bar: Dashboard Version -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">
+        SUTU <span>LMS</span>
+      </a>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Simulated Active User Profile seamlessly encapsulating structured Dynamic Notifications -->
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          
+          <!-- Appended functionally mathematically mapping -->
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList">
+              <!-- JS natively drives structural injection -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary Identity mapping -->
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span id="headerUserName" class="user-name" style="color: var(--bg-color); font-weight: 500;">Personnel</span>
+          <div id="headerUserAvatar" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">UN</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Container -->
+  <div class="dashboard-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+      <div class="sidebar-logo">
+        <img src="../assets/university-logo.png" alt="SUTU Logo">
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html" class="active"><i data-feather="grid" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard</span></a></li>
+        <li><a href="courses.html"><i data-feather="book-open" style="margin-right: 12px; width: 20px;"></i> <span>Academy Pavilions</span></a></li>
+        <li><a href="assignment.html"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>Assignments</span></a></li>
+        <li><a href="grades.html"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Academy Grades</span></a></li>
+        <li><a href="announcements.html"><i data-feather="bell" style="margin-right: 12px; width: 20px;"></i> <span>Announcements</span></a></li>
+        <li><a href="doubts.html"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="profile.html"><i data-feather="user" style="margin-right: 12px; width: 20px;"></i> <span>Profile</span></a></li>
+        
+        <!-- Bottom Aligned Section -->
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='../index.html';" id="logoutBtn" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+    <main class="dashboard-content">
+      
+      <!-- Welcome Banner -->
+      <div class="welcome-banner" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); padding: 3rem; border-radius: var(--radius-lg); color: #fff; margin-bottom: 2.5rem; box-shadow: var(--premium-shadow);">
+        <h2 id="welcomeUserName" style="font-size: 2.5rem; margin-bottom: 0.75rem; font-weight: 700;">Welcome back!</h2>
+        <p style="color: rgba(255,255,255,0.95); font-size: 1.2rem; font-weight: 400;">You have 2 upcoming deadlines this week. Follow the protocols!</p>
+      </div>
+
+      <!-- Analytics/Summary Cards -->
+      <div class="summary-grid" id="studentSummaryGrid">
+        <a href="courses.html" class="summary-card premium-card reveal delay-100" style="text-decoration: none; color: inherit; display: flex;">
+          <div class="summary-icon"><i data-feather="book"></i></div>
+          <div class="summary-info">
+            <h3 id="dashCountEnrolled">-</h3>
+            <p>Enrolled Training</p>
+          </div>
+        </a>
+        <a href="assignment.html" class="summary-card premium-card reveal delay-200" style="text-decoration: none; color: inherit; display: flex;">
+          <div class="summary-icon"><i data-feather="edit-3"></i></div>
+          <div class="summary-info">
+            <h3 id="dashCountPending">-</h3>
+            <p>Pending Briefing</p>
+          </div>
+        </a>
+        <a href="assignment.html" class="summary-card premium-card reveal delay-300" style="text-decoration: none; color: inherit; display: flex;">
+          <div class="summary-icon"><i data-feather="calendar"></i></div>
+          <div class="summary-info">
+            <h3 id="dashCountDeadlines">-</h3>
+            <p>Upcoming Proto-Deadlines</p>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Admin Dashboard Overview Cards (Genuine Analytics) -->
+      <div class="summary-grid" id="adminSummaryGrid" style="display: none;">
+        <div class="summary-card premium-card reveal delay-100" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white;">
+          <div class="summary-icon" style="background: rgba(255,255,255,0.1);"><i data-feather="users" style="color: #fff;"></i></div>
+          <div class="summary-info">
+            <h3 id="adminCountStudents">...</h3>
+            <p style="color: #cbd5e1;">Active Students</p>
+          </div>
+        </div>
+        <div class="summary-card premium-card reveal delay-200" style="background: linear-gradient(135deg, #1e1b4b, #312e81); color: white;">
+          <div class="summary-icon" style="background: rgba(255,255,255,0.1);"><i data-feather="briefcase" style="color: #c7d2fe;"></i></div>
+          <div class="summary-info">
+            <h3 id="adminCountFaculty">...</h3>
+            <p style="color: #cbd5e1;">Registered Faculty</p>
+          </div>
+        </div>
+        <div class="summary-card premium-card reveal delay-300" style="background: linear-gradient(135deg, #064e3b, #047857); color: white;">
+          <div class="summary-icon" style="background: rgba(255,255,255,0.1);"><i data-feather="book-open" style="color: #a7f3d0;"></i></div>
+          <div class="summary-info">
+            <h3 id="adminCountCourses">...</h3>
+            <p style="color: #cbd5e1;">Total Pavilions</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- "My Enrolled Courses" Section -->
+      <div class="section-header" id="enrolledCoursesHeader">
+        <h3 style="font-family: var(--font-heading); color: var(--primary-color); font-size: 1.5rem;">Current Training Protocols</h3>
+        <a href="courses.html" class="btn btn-outline" style="color: var(--primary-color); border-color: #cbd5e1; padding: 0.5rem 1rem;">View All</a>
+      </div>
+
+      <div class="course-grid" id="enrolledCoursesGrid">
+        <!-- Course Card 1 -->
+        <div class="course-card">
+          <div class="course-thumbnail">
+            <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?q=80&w=600&auto=format&fit=crop" alt="DSA">
+            <span class="course-badge">SU-DSA-01</span>
+          </div>
+          <div class="course-details">
+            <h4>Data Structures and Algorithms</h4>
+            <p class="course-faculty">Academy Kommissar: Dr. Ramesh Kumar</p>
+            
+            <div class="progress-wrapper">
+              <div class="progress-meta">
+                <span>Training Progress</span>
+                <span>65%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 65%; background: var(--accent-color);"></div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+              <a href="lesson.html" class="btn btn-primary" style="flex: 1; text-align: center;">Continue</a>
+              <button class="btn btn-outline pay-exam-btn" data-course="SU-DSA-01" style="padding: 0.6rem 1rem; border-color: var(--accent-color); color: var(--primary-color);">Pay Protocol Fee</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Card 2 -->
+        <div class="course-card">
+          <div class="course-thumbnail" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+            <span class="course-badge">SU-DBMS-02</span>
+          </div>
+          <div class="course-details">
+            <h4>Information Control Systems</h4>
+            <p class="course-faculty">Academy Kommissar: Prof. Anjali Deshmukh</p>
+            
+            <div class="progress-wrapper">
+              <div class="progress-meta">
+                <span>Completion</span>
+                <span>40%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%;"></div>
+              </div>
+            </div>
+            <a href="lesson.html" class="btn btn-primary" style="width: 100%; text-align: center; padding: 0.6rem;">Resume Training</a>
+          </div>
+        </div>
+
+        <!-- Course Card 3 -->
+        <div class="course-card">
+          <div class="course-thumbnail" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);">
+            <span class="course-badge">SU-OS-05</span>
+          </div>
+          <div class="course-details">
+            <h4>Operating Systems Sovereignty</h4>
+            <p class="course-faculty">Academy Kommissar: Dr. Sanjay Patil</p>
+            
+            <div class="progress-wrapper">
+              <div class="progress-meta">
+                <span>Completion</span>
+                <span>85%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 85%;"></div>
+              </div>
+            </div>
+            <a href="lesson.html" class="btn btn-primary" style="width: 100%; text-align: center; padding: 0.6rem;">Resume Training</a>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="logo">
+          <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+            <img src="../assets/university-logo.png" alt="SUTU Logo" style="height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 1.8rem; font-weight: 700; color: var(--bg-color);">SUTU <span style="color: var(--accent-color);">LMS</span></span>
+            </div>
+          </a>
+        </div>
+        <p class="footer-desc">Empowering Soviet Union Technological University students with unified digital instruction and interactive online protocols.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact">
+          <li><strong>Address:</strong> Alexanderplatz 1, Berlin, Germany 10178</li>
+          <li><strong>Email:</strong> kommissariat@sutu.edu</li>
+          <li><strong>Phone:</strong> +49 30 123 456 78</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUTU LMS. Soviet Union Technological University. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Initialize SVG Feather Icons to replace specific tags -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/notifications.js?v=6"></script>
+  <script src="../js/mobile.js"></script>
+  <script src="../js/branding.js?v=8"></script>
+  <script src="../js/sidebar-toggle.js"></script>
+  <script src="../js/payment.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const userEmail = localStorage.getItem("userEmail") || "";
+      const userRole = localStorage.getItem("userRole") || "Student";
+      const isAdmin = userRole === "Admin" || userRole === "Faculty";
+      
+      if (isAdmin) {
+        const summaryGrid = document.getElementById("studentSummaryGrid");
+        const enrolledHeader = document.getElementById("enrolledCoursesHeader");
+        const enrolledGrid = document.getElementById("enrolledCoursesGrid");
+        const adminGrid = document.getElementById("adminSummaryGrid");
+        
+        if (summaryGrid) summaryGrid.style.display = 'none';
+        if (enrolledHeader) enrolledHeader.style.display = 'none';
+        if (enrolledGrid) enrolledGrid.style.display = 'none';
+        if (adminGrid) adminGrid.style.display = 'grid';
+
+        const welcomeSubtext = document.querySelector('.welcome-banner p');
+        if (welcomeSubtext) welcomeSubtext.textContent = "Dashboard Overview - Higher Privileges Active";
+        
+        fetchAdminDashboardData();
+      } else {
+        fetchStudentDashboardData(userEmail);
+      }
+
+      async function fetchAdminDashboardData() {
+        try {
+          const { count: studentCount } = await _supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'Student');
+          const { count: facultyCount } = await _supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'Faculty');
+          const { count: courseCount } = await _supabase.from('courses').select('*', { count: 'exact', head: true });
+          
+          document.getElementById("adminCountStudents").textContent = studentCount || 0;
+          document.getElementById("adminCountFaculty").textContent = facultyCount || 0;
+          document.getElementById("adminCountCourses").textContent = courseCount || 0;
+        } catch(err) {
+          console.error("Error fetching admin statistics", err);
+        }
+      }
+
+      async function fetchStudentDashboardData(email) {
+        const enrolledGrid = document.getElementById("enrolledCoursesGrid");
+        const dashCountEnrolled = document.getElementById('dashCountEnrolled');
+        const dashCountPending = document.getElementById('dashCountPending');
+        const dashCountDeadlines = document.getElementById('dashCountDeadlines');
+
+        if (enrolledGrid) enrolledGrid.innerHTML = ''; 
+        
+        if (!email) return;
+
+        try {
+          if (dashCountPending) dashCountPending.textContent = "0";
+          if (dashCountDeadlines) dashCountDeadlines.textContent = "0";
+
+          const { data: myEnrollments, error: joinError } = await _supabase
+            .from('enrollments')
+            .select('*, courses:course_id(image_url, course_code, course_name)')
+            .eq('user_email', email);
+
+          if (joinError) {
+             // Redacted fallback for simplicity in fixing UI 
+          } else {
+            const formattedEnrolls = myEnrollments.map(e => ({
+              ...e,
+              course_image: e.courses ? e.courses.image_url : null,
+              course_title: e.courses ? e.courses.course_name : e.course_name,
+              course_tag: e.courses ? e.courses.course_code : e.course_code
+            }));
+            renderCards(formattedEnrolls, null, true);
+          }
+
+          function renderCards(enrollList, courseList, isReady = false) {
+            if (dashCountEnrolled) dashCountEnrolled.textContent = enrollList.length;
+            if (enrolledGrid) {
+              if (enrollList.length === 0) {
+                enrolledGrid.innerHTML = '<p style="color:#64748b; font-size:1.1rem; padding: 1rem 0;">You have not enrolled in any protocols yet.</p>';
+              } else {
+                enrollList.forEach((enroll, index) => {
+                  let img, title, code;
+                  if (isReady) {
+                    img = enroll.course_image;
+                    title = enroll.course_title;
+                    code = enroll.course_tag;
+                  }
+                  const card = document.createElement('div');
+                  const delay = ((index % 3) + 1) * 100;
+                  card.className = `course-card premium-card reveal delay-${delay}`;
+                  card.innerHTML = `
+                    <div class="course-thumbnail">
+                      ${img ? `<img src="${img}" alt="${title}">` : `<div style="width:100%; height:100%; background: linear-gradient(135deg, var(--primary-color), var(--primary-light));"></div>`}
+                      <span class="course-badge">${code}</span>
+                    </div>
+                    <div class="course-details">
+                      <h4>${title}</h4>
+                      <p class="course-faculty" style="font-size: 0.9rem; color: #64748b;">Enrolled: ${new Date(enroll.created_at).toLocaleDateString()}</p>
+                      <div class="progress-wrapper">
+                        <div class="progress-meta"><span>Protocol Progress</span><span>${enroll.progress || 0}%</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: ${enroll.progress || 0}%; background: var(--accent-color);"></div></div>
+                      </div>
+                      <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <a href="lesson.html?course=${enroll.course_id}" class="btn btn-primary" style="flex: 1; text-align: center;">Go to Training</a>
+                        <button class="btn btn-outline pay-exam-btn" data-course-id="${enroll.course_id}" style="padding: 0.6rem 1rem; border-color: var(--accent-color); color: var(--primary-color);">Protocol Fee</button>
+                      </div>
+                    </div>
+                  `;
+                  enrolledGrid.appendChild(card);
+                });
+              }
+            }
+          }
+        } catch (err) {}
+      }
+      
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.clear();
+          window.location.href = "../index.html";
+        });
+      }
+      feather.replace();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SUTU LMS - Personnel Profile and Protocol Records">
+  <title>SUTU LMS - Personnel Profile</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Base Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .profile-header { display: flex; align-items: center; gap: 2rem; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 5px solid var(--primary-color); }
+    .profile-avatar-lg { width: 100px; height: 100px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 2.5rem; text-transform: uppercase; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .profile-info h1 { font-family: var(--font-heading); font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem; }
+    .profile-info p { color: #64748b; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .profile-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+    @media (max-width: 992px) { .profile-grid { grid-template-columns: 1fr; } }
+    .profile-section { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .profile-section h3 { font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; }
+    .detail-row { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px dashed #e2e8f0; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: #64748b; font-weight: 500; }
+    .detail-value { color: #1e293b; font-weight: 600; }
+    .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; border-bottom: 1px dashed #e2e8f0; }
+    .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: #10b981; }
+    input:checked + .slider:before { transform: translateX(20px); }
+  </style>
+</head>
+<body>
+  <!-- Auth Guard: Must be first script on every protected page -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/university-logo.png" alt="SUTU Logo" class="nav-logo">SUTU <span>LMS</span></a>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="courses.html">Pavilions</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        
+        <div class="notification-bell" id="globalNavBell" title="Unread Platform Notifications">
+          <a href="javascript:void(0);" style="color: inherit;"><i data-feather="bell" style="width: 20px;"></i></a>
+          <span class="notification-badge" id="navGlobalUnreadCount">0</span>
+          
+          <div class="notification-dropdown" id="globalNotifDropdown">
+            <div class="notif-header">
+              <h4>Recent Notifications</h4>
+              <button class="mark-all-read" id="markAllReadBtn">Mark all as read</button>
+            </div>
+            <div class="notif-list" id="globalNotifList">
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" class="user-profile-trigger">
+          <span id="headerUserName" class="user-name" style="color: var(--bg-color); font-weight: 500;">John Doe</span>
+          <div id="headerUserAvatar" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--accent-color); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">JD</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle"><i data-feather="chevron-left"></i></button>
+    <div class="sidebar-logo">
+      <img src="../assets/university-logo.png" alt="University Logo">
+    </div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html"><i data-feather="grid" style="margin-right: 12px; width: 20px;"></i> <span>Dashboard</span></a></li>
+        <li><a href="courses.html"><i data-feather="book-open" style="margin-right: 12px; width: 20px;"></i> <span>My Pavilions</span></a></li>
+        <li><a href="assignment.html"><i data-feather="file-text" style="margin-right: 12px; width: 20px;"></i> <span>Assignments</span></a></li>
+        <li><a href="grades.html"><i data-feather="award" style="margin-right: 12px; width: 20px;"></i> <span>Grades</span></a></li>
+        <li><a href="announcements.html"><i data-feather="bell" style="margin-right: 12px; width: 20px;"></i> <span>Announcements</span></a></li>
+        <li><a href="doubts.html"><i data-feather="help-circle" style="margin-right: 12px; width: 20px;"></i> <span>Doubt Sessions</span></a></li>
+        <li><a href="forum.html"><i data-feather="message-square" style="margin-right: 12px; width: 20px;"></i> <span>Discussion Forums</span></a></li>
+        <li><a href="profile.html" class="active"><i data-feather="user" style="margin-right: 12px; width: 20px;"></i> <span>Profile</span></a></li>
+        
+        <li style="margin-top: 3rem;"><a href="javascript:void(0);" onclick="localStorage.clear(); window.location.href='../index.html';" style="color: #ef4444;"><i data-feather="log-out" style="margin-right: 12px; width: 20px;"></i> <span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content" style="display: flex; flex-direction: column;">
+      
+      <div class="profile-header">
+        <div class="profile-avatar-lg" id="lgUserAvatar">ST</div>
+        <div class="profile-info">
+          <h1 id="lgUserName">Loading Name...</h1>
+          <p><i data-feather="mail" style="width: 16px;"></i> <span id="lgUserEmail">personnel@sutu.edu</span></p>
+          <p id="lgUserBadge" style="font-weight: 500; font-size: 0.95rem; margin-top: 0.5rem;"></p>
+          <p id="dispBio" style="font-style: italic; margin-top: 0.5rem; max-width: 500px; color: #475569; font-size: 0.9rem;"></p>
+        </div>
+        <div style="margin-left: auto;">
+          <button id="editProfileBtn" class="btn btn-outline" style="border-color: var(--primary-color); color: var(--primary-color);">
+            <i data-feather="edit-2" style="width: 16px; margin-right: 4px;"></i> Edit Profile
+          </button>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <!-- Academic Details -->
+        <div class="profile-section" id="academicSection">
+          <h3 id="academicHeading"><i data-feather="book"></i> Information</h3>
+          <div id="enrollmentRow" class="detail-row">
+            <span class="detail-label" id="enrollmentLabelTitle">Enrollment Number</span>
+            <span class="detail-value" id="dispEnrollment">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Department</span>
+            <span class="detail-value" id="dispDepartment">Loading...</span>
+          </div>
+          <div id="semesterRow" class="detail-row">
+            <span class="detail-label">Current Semester</span>
+            <span class="detail-value" id="dispSemester">Semester 4</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label" id="roleLabelTitle">Role</span>
+            <span class="detail-value" id="dispRole">Loading...</span>
+          </div>
+          <div id="admissionRow" class="detail-row">
+            <span class="detail-label">Admission Year</span>
+            <span class="detail-value" id="dispAdmission">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Phone</span>
+            <span class="detail-value" id="dispPhone">-</span>
+          </div>
+          <div id="addressRow" class="detail-row">
+            <span class="detail-label">Address</span>
+            <span class="detail-value" id="dispAddress">-</span>
+          </div>
+          
+          <div id="adminControlsArea" style="display: none; margin-top: 1rem;">
+            <a href="admin.html" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.8rem;"><i data-feather="users" style="width: 16px;"></i> Manage Users</a>
+            <a href="admin.html" class="btn btn-outline" style="border-color: var(--primary-color); color: var(--primary-color); width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem;"><i data-feather="book-open" style="width: 16px;"></i> Manage Pavilions</a>
+          </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="profile-section">
+          <h3><i data-feather="settings"></i> Account Settings</h3>
+          
+          <div class="settings-row">
+            <div>
+              <strong style="color: #1e293b; display: block; margin-bottom: 0.2rem;">Email Notifications</strong>
+              <span style="color: #64748b; font-size: 0.85rem;">Receive updates on grades and assignments</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <strong style="color: #1e293b; display: block; margin-bottom: 0.2rem;">SMS Alerts</strong>
+              <span style="color: #64748b; font-size: 0.85rem;">Urgent university announcements</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div style="margin-top: 2rem;">
+            <button id="changePasswordBtn" class="btn btn-primary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
+              <i data-feather="lock" style="width: 16px;"></i> Change Password
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast Notification strategically -->
+    <div id="profileToast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; align-items: center; gap: 0.5rem;">
+      <i data-feather="check-circle" style="width: 20px;"></i>
+      <span style="font-weight: 500;">Profile updated successfully!</span>
+    </div>
+
+    <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+      <div style="background: white; border-radius: 12px; padding: 2.5rem; width: 95%; max-width: 650px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 1.5rem;">Edit Profile</h2>
+        
+        <form id="editProfileForm">
+          <!-- Profile Picture Upload Area -->
+          <div style="margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem;">
+            <div id="editAvatarPreview" style="width: 90px; height: 90px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <i data-feather="user" style="color: #cbd5e1; width: 40px; height: 40px;"></i>
+            </div>
+            <div>
+              <label for="editProfilePicInput" class="btn btn-outline" style="cursor: pointer; padding: 0.5rem 1rem; font-size: 0.85rem; border-color: #cbd5e1;">
+                <i data-feather="camera" style="width: 14px; margin-right: 6px;"></i> Update Photo
+              </label>
+              <input type="file" id="editProfilePicInput" accept="image/png, image/jpeg, image/webp" style="display: none;">
+            </div>
+            <small style="color: #94a3b8; font-size: 0.8rem;">JPG, PNG or WebP. Max 2MB.</small>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Full Name</label>
+              <input type="text" id="editNameInput" required style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Department</label>
+              <select id="editDeptInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+                <option value="Computer Engineering">Computer Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+                <option value="Electronics Engineering">Electronics Engineering</option>
+                <option value="Applied Sciences">Applied Sciences</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="studentOnlyFields">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Enrollment ID</label>
+                <input type="text" id="editEnrollInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Semester</label>
+                <select id="editSemesterInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+                  <option value="Sem 1">Semester 1</option>
+                  <option value="Sem 2">Semester 2</option>
+                  <option value="Sem 3">Semester 3</option>
+                  <option value="Sem 4">Semester 4</option>
+                  <option value="Sem 5">Semester 5</option>
+                  <option value="Sem 6">Semester 6</option>
+                  <option value="Sem 7">Semester 7</option>
+                  <option value="Sem 8">Semester 8</option>
+                </select>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Admission Year</label>
+                <input type="number" id="editAdmissionInput" placeholder="2024" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Phone Number</label>
+                <input type="text" id="editPhoneInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Address</label>
+              <textarea id="editAddressInput" rows="2" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;"></textarea>
+            </div>
+          </div>
+
+          <div id="staffOnlyFields" style="display: none;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Employee ID</label>
+                <input type="text" id="editEmployeeIdInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+              </div>
+              <div id="facultyDesignationWrap">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Designation</label>
+                <input type="text" id="editDesignationInput" placeholder="e.g. Professor" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Phone Number Staff</label>
+              <input type="text" id="editStaffPhoneInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Bio (About Me)</label>
+            <textarea id="editBioInput" maxlength="200" rows="3" placeholder="Tell us something about yourself..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px;"></textarea>
+            <small style="color: #64748b;">Max 200 characters</small>
+          </div>
+        </form>
+        
+        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+          <button id="cancelProfileBtn" class="btn btn-outline" style="border-color: #cbd5e1; color: #64748b;">Cancel</button>
+          <button id="saveProfileBtn" class="btn btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="passwordModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+      <div style="background: white; border-radius: 12px; padding: 2.5rem; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 1.5rem;">Change Password</h2>
+        
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Current Password</label>
+          <input type="password" id="currentPasswordInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Inter', sans-serif;">
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">New Password</label>
+          <input type="password" id="newPasswordInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Inter', sans-serif;">
+        </div>
+        
+        <div style="margin-bottom: 2rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155;">Confirm New Password</label>
+          <input type="password" id="confirmNewPasswordInput" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Inter', sans-serif;">
+        </div>
+        
+        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+          <button id="cancelPasswordBtn" class="btn btn-outline" style="border-color: #cbd5e1; color: #64748b;">Cancel</button>
+          <button id="savePasswordBtn" class="btn btn-primary">Update Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>feather.replace();</script>
+  <script src="../js/mobile.js"></script>
+  <script src="../js/branding.js?v=8"></script>
+  <script src="../js/notifications.js?v=6"></script>
+  <script src="../js/sidebar-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      feather.replace();
+
+      const userEmail = localStorage.getItem('userEmail');
+      const userRole = localStorage.getItem('userRole');
+
+      if (!userEmail) {
+        window.location.href = '../index.html';
+        return;
+      }
+
+      const toast = document.getElementById('profileToast');
+      const showToast = (message, isError = false) => {
+        const span = toast.querySelector('span');
+        span.textContent = message;
+        toast.style.backgroundColor = isError ? '#ef4444' : '#10b981';
+        const icon = toast.querySelector('i');
+        icon.setAttribute('data-feather', isError ? 'alert-circle' : 'check-circle');
+        feather.replace();
+        toast.style.display = 'flex';
+        setTimeout(() => toast.style.display = 'none', 3000);
+      };
+
+      const renderProfile = (profile) => {
+        const initials = profile.full_name.split(" ").map(n => n[0]).join("").substring(0,2).toUpperCase() || "ST";
+        
+        document.getElementById("lgUserName").textContent = profile.full_name;
+        document.getElementById("lgUserEmail").textContent = profile.email;
+        document.getElementById("dispBio").textContent = profile.bio || "";
+        
+        // Handle Avatar rendering from localStorage to bypass schema limits for now
+        const savedAvatar = localStorage.getItem('sutu_avatar_' + userEmail);
+        if (savedAvatar) {
+          const imgHtml = `<img src="${savedAvatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
+          document.getElementById("lgUserAvatar").innerHTML = imgHtml;
+          document.querySelectorAll(".user-avatar").forEach(el => el.innerHTML = imgHtml);
+        } else {
+          document.getElementById("lgUserAvatar").innerHTML = initials;
+          document.querySelectorAll(".user-avatar").forEach(el => el.innerHTML = initials);
+        }
+        
+        document.querySelectorAll(".user-name").forEach(el => el.textContent = profile.full_name);
+        
+        document.getElementById("dispDepartment").textContent = profile.department || "Not Set";
+        document.getElementById("dispPhone").textContent = profile.phone || "-";
+        
+        const lgBadge = document.getElementById("lgUserBadge");
+        const dispRole = document.getElementById("dispRole");
+        const roleLabelTitle = document.getElementById("roleLabelTitle");
+        const enrollmentRow = document.getElementById("enrollmentRow");
+        const semesterRow = document.getElementById("semesterRow");
+        const admissionRow = document.getElementById("admissionRow");
+        const addressRow = document.getElementById("addressRow");
+        const enrollmentLabelTitle = document.getElementById("enrollmentLabelTitle");
+        const dispEnrollment = document.getElementById("dispEnrollment");
+        const adminControlsArea = document.getElementById("adminControlsArea");
+
+        if (profile.role === "Admin") {
+          lgBadge.innerHTML = `<i data-feather="shield" style="width: 16px;"></i> Administrator`;
+          lgBadge.style.color = "#d97706";
+          document.getElementById("academicHeading").innerHTML = `<i data-feather="cpu"></i> Admin Controls`;
+          
+          enrollmentRow.style.display = 'none';
+          semesterRow.style.display = 'none';
+          admissionRow.style.display = 'none';
+          addressRow.style.display = 'none';
+          if(document.getElementById('dispDepartment')) document.getElementById('dispDepartment').parentElement.style.display = 'none';
+          dispRole.parentElement.style.display = 'none';
+          adminControlsArea.style.display = 'block';
+        }
+        else if (profile.role === "Faculty") {
+          lgBadge.innerHTML = `<i data-feather="briefcase" style="width: 16px;"></i> Faculty Member`;
+          lgBadge.style.color = "#3b82f6";
+          enrollmentLabelTitle.textContent = "Employee ID";
+          dispEnrollment.textContent = profile.employee_id || "-";
+          dispRole.textContent = profile.designation || "Assistant Professor";
+          roleLabelTitle.textContent = "Designation";
+          semesterRow.style.display = 'none';
+          admissionRow.style.display = 'none';
+          addressRow.style.display = 'none';
+        } 
+        else {
+          lgBadge.innerHTML = `<i data-feather="check-circle" style="width: 16px;"></i> Active Student`;
+          lgBadge.style.color = "#10b981";
+          dispEnrollment.textContent = profile.enrollment_number || "-";
+          document.getElementById("dispSemester").textContent = profile.semester || "Not Set";
+          document.getElementById("dispAdmission").textContent = profile.admission_year || "-";
+          document.getElementById("dispAddress").textContent = profile.address || "-";
+          dispRole.textContent = "Undergraduate Student";
+          enrollmentLabelTitle.textContent = "Enrollment Number";
+        }
+        feather.replace();
+      };
+
+      const fetchProfile = async () => {
+        const { data: profile, error } = await _supabase
+          .from('users')
+          .select('*')
+          .eq('email', userEmail)
+          .single();
+
+        if (error) {
+          console.error('Error fetching profile:', error);
+          return;
+        }
+
+        if (profile) {
+          localStorage.setItem('userName', profile.full_name);
+          localStorage.setItem('userRole', profile.role);
+          localStorage.setItem('userDepartment', profile.department || "");
+          const enrollment = profile.role === 'Student' ? profile.enrollment_number : profile.employee_id;
+          localStorage.setItem('userEnrollment', enrollment || "");
+          renderProfile(profile);
+        }
+      };
+
+      await fetchProfile();
+
+      const editModal = document.getElementById('editProfileModal');
+      const editBtn = document.getElementById('editProfileBtn');
+      const cancelBtn = document.getElementById('cancelProfileBtn');
+      const saveBtn = document.getElementById('saveProfileBtn');
+      
+      const studentFields = document.getElementById('studentOnlyFields');
+      const staffFields = document.getElementById('staffOnlyFields');
+      const facultyDesignationWrap = document.getElementById('facultyDesignationWrap');
+
+      // Picture Upload State
+      const profilePicInput = document.getElementById('editProfilePicInput');
+      const avatarPreview = document.getElementById('editAvatarPreview');
+      let base64PhotoData = "";
+
+      profilePicInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 2 * 1024 * 1024) {
+            showToast('File size must be under 2MB', true);
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            base64PhotoData = evt.target.result;
+            avatarPreview.innerHTML = `<img src="${base64PhotoData}" style="width: 100%; height: 100%; object-fit: cover;">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      editBtn.addEventListener('click', async () => {
+        // Fetch fresh data before opening
+        const { data: profile } = await _supabase.from('users').select('*').eq('email', userEmail).single();
+        if (!profile) return;
+
+        // Restore image preview if available
+        base64PhotoData = localStorage.getItem('sutu_avatar_' + userEmail) || "";
+        if (base64PhotoData) {
+          avatarPreview.innerHTML = `<img src="${base64PhotoData}" style="width: 100%; height: 100%; object-fit: cover;">`;
+        } else {
+          avatarPreview.innerHTML = `<i data-feather="user" style="color: #cbd5e1; width: 40px; height: 40px;"></i>`;
+          feather.replace();
+        }
+
+        document.getElementById('editNameInput').value = profile.full_name || "";
+        document.getElementById('editDeptInput').value = profile.department || "Computer Engineering";
+        document.getElementById('editBioInput').value = profile.bio || "";
+
+        if (userRole === 'Student') {
+          studentFields.style.display = 'block';
+          staffFields.style.display = 'none';
+          document.getElementById('editEnrollInput').value = profile.enrollment_number || "";
+          document.getElementById('editSemesterInput').value = profile.semester || "Sem 1";
+          document.getElementById('editAdmissionInput').value = profile.admission_year || "";
+          document.getElementById('editPhoneInput').value = profile.phone || "";
+          document.getElementById('editAddressInput').value = profile.address || "";
+        } else {
+          studentFields.style.display = 'none';
+          staffFields.style.display = 'block';
+          document.getElementById('editEmployeeIdInput').value = profile.employee_id || "";
+          document.getElementById('editStaffPhoneInput').value = profile.phone || "";
+          if (userRole === 'Faculty') {
+            facultyDesignationWrap.style.display = 'block';
+            document.getElementById('editDesignationInput').value = profile.designation || "";
+          } else {
+            facultyDesignationWrap.style.display = 'none';
+          }
+        }
+        editModal.style.display = 'flex';
+      });
+
+      cancelBtn.addEventListener('click', () => editModal.style.display = 'none');
+
+      saveBtn.addEventListener('click', async () => {
+        const newFullName = document.getElementById('editNameInput').value;
+        const newDepartment = document.getElementById('editDeptInput').value;
+        const newBio = document.getElementById('editBioInput').value;
+
+        const updateData = {
+          full_name: newFullName,
+          department: newDepartment,
+          bio: newBio,
+          profile_updated_at: new Date().toISOString()
+        };
+
+        let enrollmentVal = "";
+
+        if (userRole === 'Student') {
+          updateData.enrollment_number = document.getElementById('editEnrollInput').value;
+          updateData.semester = document.getElementById('editSemesterInput').value;
+          updateData.admission_year = document.getElementById('editAdmissionInput').value;
+          updateData.phone = document.getElementById('editPhoneInput').value;
+          updateData.address = document.getElementById('editAddressInput').value;
+          enrollmentVal = updateData.enrollment_number;
+        } else if (userRole === 'Faculty') {
+          updateData.employee_id = document.getElementById('editEmployeeIdInput').value;
+          updateData.designation = document.getElementById('editDesignationInput').value;
+          updateData.phone = document.getElementById('editStaffPhoneInput').value;
+          enrollmentVal = updateData.employee_id;
+        } else if (userRole === 'Admin') {
+          updateData.employee_id = document.getElementById('editEmployeeIdInput').value;
+          updateData.phone = document.getElementById('editStaffPhoneInput').value;
+          enrollmentVal = updateData.employee_id;
+        }
+
+        const { error } = await _supabase
+          .from('users')
+          .update(updateData)
+          .eq('email', userEmail);
+
+        if (!error) {
+          localStorage.setItem('userName', newFullName);
+          localStorage.setItem('userDepartment', newDepartment);
+          localStorage.setItem('userEnrollment', enrollmentVal);
+          
+          if (base64PhotoData) {
+            localStorage.setItem('sutu_avatar_' + userEmail, base64PhotoData);
+          }
+          
+          await fetchProfile(); // Refresh UI
+          editModal.style.display = 'none';
+          showToast("Profile updated successfully!");
+        } else {
+          showToast("Failed to save: " + error.message, true);
+        }
+      });
+
+      // Password Modal
+      const passBtn = document.getElementById('changePasswordBtn');
+      const passModal = document.getElementById('passwordModal');
+      const passCancel = document.getElementById('cancelPasswordBtn');
+      const passSave = document.getElementById('savePasswordBtn');
+
+      passBtn.addEventListener('click', () => {
+        document.getElementById('currentPasswordInput').value = '';
+        document.getElementById('newPasswordInput').value = '';
+        document.getElementById('confirmNewPasswordInput').value = '';
+        passModal.style.display = 'flex';
+      });
+
+      passCancel.addEventListener('click', () => passModal.style.display = 'none');
+
+      passSave.addEventListener('click', async () => {
+        const newPw = document.getElementById('newPasswordInput').value;
+        const cnfPw = document.getElementById('confirmNewPasswordInput').value;
+        if(newPw && newPw === cnfPw) {
+          // Note: Supabase password update usually requires auth session. 
+          // This is a placeholder for actual auth logic if session is handled.
+          passModal.style.display = 'none';
+          showToast('Password update functionality requires active session auth.');
+        } else {
+          alert("Passwords do not match or are empty!");
+        }
+      });
+    });
+  </script>
+  <!-- Supabase already loaded at top of body; no need to repeat here -->
+</body>
+</html>
+
+
+
+
+
