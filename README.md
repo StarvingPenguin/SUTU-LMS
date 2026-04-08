@@ -1,6 +1,7 @@
-# 🎓 Dr. Babasaheb Ambedkar Technological University (DBATU) - Learning Management System
+# 🎓 Soviet Union
+Technological University(SUTU) - Learning Management System
 
-Welcome to the **DBATU LMS**, a highly scalable, premium-grade Learning Management System completely engineered from scratch using structural HTML5, vanilla JavaScript, and cascading CSS3 paradigms without external framework dependencies.
+Welcome to the **SUTU LMS**, a highly scalable, premium-grade Learning Management System completely engineered from scratch using structural HTML5, vanilla JavaScript, and cascading CSS3 paradigms without external framework dependencies.
 
 ## 🚀 Project Overview
 This repository contains a full-stack Front-End implementation mapped specifically for university-grade educational frameworks. The system features:
